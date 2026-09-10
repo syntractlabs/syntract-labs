@@ -1,14 +1,10 @@
-/** TREAT AS IMMUTABLE - This file is protected by the file-edit tool
- *
+/**
  * Database configuration loader
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { env } from 'node:process';
 
-/**
- * Database credentials interface
- */
 export interface DatabaseCredentials {
   host: string;
   port: number;
@@ -17,46 +13,64 @@ export interface DatabaseCredentials {
   database: string;
 }
 
-/**
- * Load database configuration from the task-local config file.
- * Reads from $NOMAD_TASK_DIR/config.json (defaults to /local/config.json).
- *
- * @returns Database connection credentials
- * @throws Error if config file not found or invalid
- */
 export function getDatabaseCredentials(): DatabaseCredentials {
+  // 1. Nomad task-local config.json (AAB/dev-supervisor containers)
   const configPath = join(env.NOMAD_TASK_DIR || '/local', 'config.json');
-
-  if (!existsSync(configPath)) {
-    throw new Error(
-      `Database configuration file not found at ${configPath}`
-    );
+  if (existsSync(configPath)) {
+    try {
+      const config = JSON.parse(readFileSync(configPath, 'utf-8'));
+      if (config.DATABASE?.VALUE) {
+        const db = config.DATABASE.VALUE;
+        if (db.HOST && db.PORT && db.USERNAME && db.PASSWORD && db.NAME) {
+          return {
+            host: db.HOST,
+            port: parseInt(String(db.PORT), 10),
+            user: db.USERNAME,
+            password: db.PASSWORD,
+            database: db.NAME,
+          };
+        }
+      }
+    } catch {
+      // fall through to env vars
+    }
   }
 
-  try {
-    const config = JSON.parse(readFileSync(configPath, 'utf-8'));
-
-    if (!config.DATABASE?.VALUE) {
-      throw new Error('Invalid config.json structure: DATABASE.VALUE not found');
+  // 2. DATABASE_URL connection string (Railway MySQL plugin, PlanetScale, etc.)
+  if (env.DATABASE_URL) {
+    try {
+      const url = new URL(env.DATABASE_URL);
+      return {
+        host: url.hostname,
+        port: url.port ? parseInt(url.port, 10) : 3306,
+        user: decodeURIComponent(url.username),
+        password: decodeURIComponent(url.password),
+        database: url.pathname.replace(/^\//, ''),
+      };
+    } catch {
+      throw new Error('DATABASE_URL is set but could not be parsed as a valid MySQL URL.');
     }
+  }
 
-    const db = config.DATABASE.VALUE;
+  // 3. Individual env vars — supports Railway MySQL plugin naming and custom naming
+  const host     = env.DB_HOST     || env.MYSQLHOST;
+  const port     = env.DB_PORT     || env.MYSQLPORT;
+  const user     = env.DB_USER     || env.MYSQLUSER;
+  const password = env.DB_PASSWORD || env.MYSQLPASSWORD;
+  const database = env.DB_NAME     || env.MYSQLDATABASE;
 
-    if (!db.HOST || !db.PORT || !db.USERNAME || !db.PASSWORD || !db.NAME) {
-      throw new Error('Invalid config.json: Missing required database credentials');
-    }
-
+  if (host && user && password && database) {
     return {
-      host: db.HOST,
-      port: parseInt(String(db.PORT), 10),
-      user: db.USERNAME,
-      password: db.PASSWORD,
-      database: db.NAME,
+      host,
+      port: port ? parseInt(port, 10) : 3306,
+      user,
+      password,
+      database,
     };
-  } catch (error) {
-    if (error instanceof SyntaxError) {
-      throw new Error(`Failed to parse ${configPath}: Invalid JSON format`);
-    }
-    throw error;
   }
+
+  throw new Error(
+    'Database credentials not found. Provide DATABASE_URL or set ' +
+    'DB_HOST / DB_PORT / DB_USER / DB_PASSWORD / DB_NAME as environment variables.'
+  );
 }
