@@ -1,0 +1,93 @@
+{
+  "hero": {
+    "badge": "SynTract Build Engine™ — Now in Beta",
+    "headline1": "Describe it.",
+    "headline2": "The engine builds it.",
+    "body": "The SynTract Build Engine is a proprietary autonomous developer agent that generates complete, production-ready software from a single prompt — mobile apps, games, AI agents, and full-stack systems. No templates. No scaffolding. Real code.",
+    "cta_primary": "Start building free",
+    "cta_secondary": "See how it works",
+    "trust1": "Free tier — 2 BCUs included",
+    "trust2": "Full source code ownership",
+    "trust3": "No credit card required"
+  },
+  "terminal": {
+    "title": "SynTract Build Engine™",
+    "lines": [
+      {
+        "id": "t1",
+        "prefix": "$",
+        "text": "syntract build \"iOS fitness tracker with AI coaching\"",
+        "type": "command"
+      },
+      {
+        "id": "t2",
+        "prefix": "›",
+        "text": "Planning architecture...",
+        "type": "info"
+      },
+      {
+        "id": "t3",
+        "prefix": "›",
+        "text": "Generating 47 source files...",
+        "type": "info"
+      },
+      {
+        "id": "t4",
+        "prefix": "›",
+        "text": "Compiling React Native + Swift modules...",
+        "type": "info"
+      },
+      {
+        "id": "t5",
+        "prefix": "›",
+        "text": "Integrating OpenAI coaching agent...",
+        "type": "info"
+      },
+      {
+        "id": "t6",
+        "prefix": "✓",
+        "text": "Build complete — 2.1 BCUs consumed",
+        "type": "success"
+      },
+      {
+        "id": "t7",
+        "prefix": "✓",
+        "text": "Source code ready for download",
+        "type": "success"
+      }
+    ]
+  },
+  "outputs_section": {
+    "eyebrow": "Output types",
+    "heading": "One engine. Full‑scale software generation.",
+    "body": "The Build Engine delivers complete, runnable products across every major category — engineered with consistent structure, clean architecture, and deployment‑ready output."
+  },
+  "engine_section": {
+    "eyebrow": "Under the hood",
+    "heading": "How the Build Engine works",
+    "body": "Not a code autocomplete. Not a template generator. A multi-stage autonomous agent that reasons, plans, and engineers software end-to-end.",
+    "docs_link": "Read the full Build Engine documentation"
+  },
+  "bcu_section": {
+    "eyebrow": "Pricing model",
+    "heading": "Pay for what you build, not what you don't.",
+    "body": "SynTract uses Build Compute Units (BCUs) — a transparent measure of the computational work required to generate your software. Simple apps cost less. Complex systems cost more. No subscriptions that charge you while you're idle.",
+    "meter_note": "BCU consumption scales with complexity, file count, and AI reasoning depth. Top-up packs available at any time."
+  },
+  "audience_section": {
+    "eyebrow": "Built for everyone",
+    "heading": "From solo founders to enterprise teams",
+    "body": "The Build Engine scales from a weekend prototype to a production system serving millions of users."
+  },
+  "ownership_section": {
+    "eyebrow": "Source code ownership",
+    "heading": "You own everything the engine builds.",
+    "body": "Every build produces clean, readable, well-structured source code that belongs entirely to you. Download it, deploy it, hand it to your engineering team, or publish it under your own brand. No lock-in. No royalties. No restrictions."
+  },
+  "cta_section": {
+    "heading": "Build your first app today.",
+    "body": "Two free BCUs. No credit card. Full source code on your first build.",
+    "cta_primary": "Start building free",
+    "cta_secondary": "View pricing"
+  }
+}

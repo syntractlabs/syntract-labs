@@ -1,0 +1,102 @@
+{
+  "topUpPacks": [
+    {
+      "hours": 1,
+      "price": 15,
+      "label": "1 BCU",
+      "note": "Quick fixes & small features",
+      "popular": false,
+      "id": "JZFwOK_AFAEpnAC2JpDwE"
+    },
+    {
+      "hours": 5,
+      "price": 60,
+      "label": "5 BCUs",
+      "note": "Best value for mid-size work",
+      "popular": true,
+      "id": "SJKJJ_C8fOqlY0UZAXWXT"
+    },
+    {
+      "hours": 10,
+      "price": 100,
+      "label": "10 BCUs",
+      "note": "Large features or new modules",
+      "popular": false,
+      "id": "kRQ9KEo0gnjMhEs36SeX-"
+    }
+  ],
+  "complexityExamples": [
+    {
+      "tier": "Free Test",
+      "examples": [
+        "Landing page with contact form",
+        "Simple CRUD app",
+        "Basic REST API",
+        "Static portfolio site"
+      ],
+      "id": "dnnKFlp913zohOrBbuJgj"
+    },
+    {
+      "tier": "Starter",
+      "examples": [
+        "MVP with auth + database",
+        "Mobile app (10–20 screens)",
+        "SaaS with basic billing",
+        "Internal dashboard"
+      ],
+      "id": "F4hObdAEQ2VX17gnOizt1"
+    },
+    {
+      "tier": "Professional",
+      "examples": [
+        "Full-stack SaaS platform",
+        "Mobile app (40+ screens)",
+        "AI agent with tool use",
+        "Multi-tenant application"
+      ],
+      "id": "so57OFp0060pYqKqC8Y5s"
+    },
+    {
+      "tier": "Enterprise",
+      "examples": [
+        "Enterprise platform suite",
+        "Real-time systems at scale",
+        "Custom AI/ML pipelines",
+        "Legacy modernization"
+      ],
+      "id": "hQDELa5yoAZPq4MXqo-MO"
+    }
+  ],
+  "faqs": [
+    {
+      "q": "What are Build Compute Units (BCUs)?",
+      "a": "BCUs represent the AI processing power required to generate your applications. Every action — architecture planning, code generation, UI design, debugging, and testing — consumes BCUs. Simple apps use fewer BCUs; complex multi-feature platforms use more. The engine estimates BCU usage before starting every build.",
+      "id": "gqXy6Of0D-18QLUSEnE2q"
+    },
+    {
+      "q": "Can I run multiple projects on one plan?",
+      "a": "Yes — you can build as many projects as you want within your included BCUs. There's no per-project limit. Run one large project or ten small ones — it's entirely up to you.",
+      "id": "8zC8BFPkGyapkjILUl-TB"
+    },
+    {
+      "q": "What happens when my BCUs run out?",
+      "a": "The engine will notify you before your BCUs are exhausted. You can then purchase a BCU top-up pack to continue building without changing your plan. Top-ups are available on Starter, Professional, and Team plans.",
+      "id": "84NJDa5DgPEog75a3cJNO"
+    },
+    {
+      "q": "Do unused BCUs roll over?",
+      "a": "Yes — unused BCUs carry forward to the following month so you never lose compute you've paid for.",
+      "id": "C6yFklADI4-h43IarjRl5"
+    },
+    {
+      "q": "Do I own the code?",
+      "a": "Yes — 100%. All source code, assets, and intellectual property generated for your build belong to you. We retain no rights to your code.",
+      "id": "c5XuT2oj03k8xf5fjf8zM"
+    },
+    {
+      "q": "How does Enterprise pricing work?",
+      "a": "Enterprise plans are billed annually and priced by the number of users: 1 user at $4,999/year, 2–5 users at $6,999/year, 6–10 users at $8,999/year. Teams of 11 or more require a custom quote — contact us and we'll put together a proposal.",
+      "id": "myWFdaEAu3rOpBJsye6Qu"
+    }
+  ]
+}

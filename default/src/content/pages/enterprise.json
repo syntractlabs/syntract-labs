@@ -1,0 +1,122 @@
+{
+  "SEAT_TIERS": [
+    {
+      "range": "1 user",
+      "price": "$499",
+      "period": "/year",
+      "highlight": false,
+      "id": "JditRfIaE2jBAAcHELLUg"
+    },
+    {
+      "range": "2–5 users",
+      "price": "$699",
+      "period": "/year",
+      "highlight": false,
+      "id": "rSg5YtCNbpJGB-mtrBlyl"
+    },
+    {
+      "range": "6–10 users",
+      "price": "$899",
+      "period": "/year",
+      "highlight": true,
+      "id": "jVFBau1Jjn_8h2nHKxz7b"
+    },
+    {
+      "range": "11+ users",
+      "price": "Custom",
+      "period": "quote",
+      "highlight": false,
+      "id": "Eddb9laP7FtJ44wVmfAJH"
+    }
+  ],
+  "CAPABILITIES": [
+    {
+      "title": "Unlimited build hours",
+      "sub": "No caps, ever",
+      "desc": "Every user on your team gets unrestricted access to the AI build agent — no hour limits, no top-up packs needed.",
+      "id": "oMxuBkr-96pYiDzUBdwto"
+    },
+    {
+      "title": "Multi-user team access",
+      "sub": "Role management",
+      "desc": "Add team members, assign roles, and manage access from a central admin dashboard.",
+      "id": "nQI2g1bQp0Pk0-eSsSlCH"
+    },
+    {
+      "title": "Dedicated agent sessions",
+      "sub": "Priority infrastructure",
+      "desc": "Your builds run on dedicated compute — no shared queues, no cold starts, no waiting.",
+      "id": "dxi_xWkGiphLmwdqVYLq3"
+    },
+    {
+      "title": "Architecture reviews",
+      "sub": "Expert oversight",
+      "desc": "Scheduled architecture review calls with a senior engineer to validate design decisions before the agent builds.",
+      "id": "7VU6fSLgJWQYrq6dJxDCS"
+    },
+    {
+      "title": "Enterprise SLA",
+      "sub": "Guaranteed uptime",
+      "desc": "Custom SLA with guaranteed response times, escalation paths, and a named account manager.",
+      "id": "IYoJxD0ZqosEzFOoNj9n_"
+    },
+    {
+      "title": "Custom deployment",
+      "sub": "Your infra or ours",
+      "desc": "Full DevOps support — CI/CD pipelines, containerization, cloud deployment, and infrastructure-as-code.",
+      "id": "YUQ9VJ7v8FB1vLK58-gmg"
+    },
+    {
+      "title": "IP transfer",
+      "sub": "100% ownership",
+      "desc": "Every build delivers complete source code and intellectual property. You own everything, we retain nothing.",
+      "id": "PsfEyNy5I5JXnKV4M62jT"
+    },
+    {
+      "title": "Dedicated support",
+      "sub": "Named CSM + Slack",
+      "desc": "A dedicated customer success manager, shared Slack channel, and priority response on all support requests.",
+      "id": "XnlMuL9W35U-Av1Ra1td9"
+    }
+  ],
+  "FAQS": [
+    {
+      "q": "What does \"unlimited build hours\" mean?",
+      "a": "Every user on your Enterprise plan can run as many builds as they want with no hour caps. The AI agent works continuously — no top-up packs, no monthly limits, no throttling.",
+      "id": "lnXk2IPW1MKZdDAi_u6Tx"
+    },
+    {
+      "q": "How does seat-based pricing work?",
+      "a": "Enterprise is billed annually based on the number of users in your organization: 1 user at $499/year, 2–5 users at $699/year, 6–10 users at $899/year. Teams of 11 or more get a custom quote tailored to your headcount and usage.",
+      "id": "DWn6Vy81bWesU8QP5jnuU"
+    },
+    {
+      "q": "Can we add users mid-year?",
+      "a": "Yes. Adding users mid-year is prorated to your renewal date. Your account manager will handle the billing adjustment — no need to wait until renewal.",
+      "id": "Q-NlatZy0az-cp30-wdtj"
+    },
+    {
+      "q": "What is included in the architecture review calls?",
+      "a": "Before a major build, a senior SynTract Labs engineer reviews your project scope, technology choices, and system design with your team. These calls catch architectural issues before the agent starts building, saving significant rework time.",
+      "id": "9psD-bBfJvShsu4cKNkPX"
+    },
+    {
+      "q": "Do we own all the code the agent produces?",
+      "a": "Yes — 100%. All source code, assets, and intellectual property generated for every build belong to your organization. We retain no rights to anything the agent produces for you.",
+      "id": "R3-9_aah6lpcKeaHsyhL-"
+    },
+    {
+      "q": "What does onboarding look like?",
+      "a": "Most Enterprise teams are fully onboarded within one week. We assign a dedicated solutions engineer who handles account setup, team provisioning, and a kickoff call to align on your first builds.",
+      "id": "38z-YmkdRUjEXp6MQ3q45"
+    }
+  ],
+  "LOGOS": [
+    "Meridian Capital",
+    "Nexus Advisory",
+    "Vantage Legal",
+    "Orion Financial",
+    "Apex Consulting",
+    "Summit Analytics"
+  ]
+}

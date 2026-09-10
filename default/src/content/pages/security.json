@@ -1,0 +1,34 @@
+{
+  "PILLARS": [
+    {
+      "title": "SOC 2 Type II Certified",
+      "body": "SynTract Labs has completed SOC 2 Type II certification. Our controls for security, availability, and confidentiality are independently audited on an ongoing basis.",
+      "id": "TcyW3csIbwbLh9ZHyGEEB"
+    },
+    {
+      "title": "Data Encryption",
+      "body": "All data is encrypted in transit using TLS 1.2+ and at rest using AES-256. Encryption keys are managed through a dedicated key management service.",
+      "id": "SutR8-H2yLsd3NF8AeQDI"
+    },
+    {
+      "title": "Access Controls",
+      "body": "Role-based access controls (RBAC) are enforced across all internal systems. Least-privilege principles apply to every service account and employee.",
+      "id": "jVfSzQ3cGyFLZ1x6dQ8gL"
+    },
+    {
+      "title": "Infrastructure Security",
+      "body": "Our infrastructure runs on hardened cloud environments with network segmentation, intrusion detection, and automated vulnerability scanning.",
+      "id": "sjgfWbyb5Y4sqUMUReziQ"
+    },
+    {
+      "title": "Audit Logging",
+      "body": "All build jobs, API calls, and administrative actions are logged with tamper-evident audit trails. Logs are retained for a minimum of 12 months.",
+      "id": "vfJPgIzmfYVZHx90OW6C5"
+    },
+    {
+      "title": "Incident Response",
+      "body": "We maintain a documented incident response plan with defined SLAs for detection, containment, and notification. Enterprise customers receive direct escalation paths.",
+      "id": "zNK4Tf6p83uSr3aDwSL75"
+    }
+  ]
+}

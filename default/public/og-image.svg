@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0A0D12"/>
+      <stop offset="100%" style="stop-color:#0F1420"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4F6EF7"/>
+      <stop offset="100%" style="stop-color:#844ff7"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F6EF7;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#844ff7;stop-opacity:0.05"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid lines -->
+  <g stroke="#ffffff" stroke-opacity="0.03" stroke-width="1">
+    <line x1="0" y1="105" x2="1200" y2="105"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/>
+    <line x1="0" y1="525" x2="1200" y2="525"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+  </g>
+
+  <!-- Glow blob top-right -->
+  <ellipse cx="950" cy="150" rx="320" ry="200" fill="url(#glow)" opacity="0.6"/>
+
+  <!-- Left accent bar -->
+  <rect x="80" y="200" width="4" height="230" rx="2" fill="url(#accent)"/>
+
+  <!-- Logo mark — hexagon icon -->
+  <g transform="translate(110, 185)">
+    <polygon points="28,0 56,16 56,48 28,64 0,48 0,16" fill="none" stroke="url(#accent)" stroke-width="2" opacity="0.9"/>
+    <polygon points="28,12 44,21 44,43 28,52 12,43 12,21" fill="url(#accent)" opacity="0.15"/>
+    <!-- Circuit lines inside hex -->
+    <line x1="28" y1="20" x2="28" y2="44" stroke="#4F6EF7" stroke-width="1.5" opacity="0.8"/>
+    <line x1="18" y1="28" x2="38" y2="28" stroke="#844ff7" stroke-width="1.5" opacity="0.8"/>
+    <circle cx="28" cy="28" r="3" fill="#4F6EF7" opacity="0.9"/>
+    <circle cx="28" cy="20" r="2" fill="#844ff7" opacity="0.7"/>
+    <circle cx="28" cy="44" r="2" fill="#844ff7" opacity="0.7"/>
+    <circle cx="18" cy="28" r="2" fill="#4F6EF7" opacity="0.7"/>
+    <circle cx="38" cy="28" r="2" fill="#4F6EF7" opacity="0.7"/>
+  </g>
+
+  <!-- Company name -->
+  <text x="185" y="228" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" font-size="22" font-weight="600" fill="#ffffff" opacity="0.5" letter-spacing="3">SYNTRACT LABS</text>
+
+  <!-- Main headline -->
+  <text x="110" y="320" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" font-size="58" font-weight="700" fill="#ffffff" letter-spacing="-1">Autonomous AI</text>
+  <text x="110" y="390" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" font-size="58" font-weight="700" letter-spacing="-1">
+    <tspan fill="url(#accent)">Software</tspan>
+    <tspan fill="#ffffff"> Studio</tspan>
+  </text>
+
+  <!-- Subline -->
+  <text x="110" y="450" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" font-size="22" fill="#ffffff" opacity="0.5">Mobile apps · Games · AI agents · Custom software</text>
+
+  <!-- Bottom accent line -->
+  <rect x="80" y="540" width="200" height="2" rx="1" fill="url(#accent)" opacity="0.6"/>
+
+  <!-- URL -->
+  <text x="110" y="575" font-family="'Segoe UI', system-ui, -apple-system, sans-serif" font-size="18" fill="#ffffff" opacity="0.35" letter-spacing="1">syntract.net</text>
+
+  <!-- Right decorative element — code bracket -->
+  <g transform="translate(880, 240)" opacity="0.12">
+    <text font-family="'Courier New', monospace" font-size="180" fill="#4F6EF7">{</text>
+  </g>
+  <g transform="translate(1050, 240)" opacity="0.08">
+    <text font-family="'Courier New', monospace" font-size="180" fill="#844ff7">}</text>
+  </g>
+</svg>

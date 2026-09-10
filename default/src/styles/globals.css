@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Core Colors */
+    --background: 218 29% 5%;
+    --foreground: 0 0% 96%;
+    --card: 224 31% 10%;
+    --card-foreground: 225 21% 93%;
+    --popover: 218 29% 5%;
+    --popover-foreground: 0 0% 96%;
+    --primary: 229 91% 64%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 259 91% 64%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 225 28% 14%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 38 92% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 222 28% 16%;
+    --input: 222 28% 16%;
+    --ring: 229 91% 64%;
+
+    /* Extended Colors */
+    --chart-1: 228 94% 94%;
+    --chart-2: 229 91% 79%;
+    --chart-3: 229 91% 64%;
+    --chart-4: 229 91% 49%;
+    --chart-5: 229 91% 34%;
+
+    /* Sidebar Colors */
+    --sidebar: 225 28% 14%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 229 91% 64%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 38 92% 50%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 222 28% 16%;
+    --sidebar-ring: 229 91% 64%;
+
+    /* Typography */
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-heading: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-serif: ui-serif, Georgia, "Times New Roman", serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+
+    /* Border Radius */
+    --radius: 0.5rem;
+
+    /* Shadows */
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading) !important;
+  }
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .animate-in {
+    animation-duration: 0.2s;
+    animation-fill-mode: both;
+  }
+
+  .fade-in {
+    animation-name: fadeIn;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* Unless told otherwise, keep it for smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}

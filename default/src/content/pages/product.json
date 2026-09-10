@@ -1,0 +1,158 @@
+{
+  "capabilities": [
+    {
+      "title": "Mobile App Development",
+      "tag": "iOS & Android",
+      "desc": "Describe your app idea and the agent architects, codes, and delivers a production-ready mobile application — complete with UI, backend, and app store assets.",
+      "bullets": [
+        "React Native & Swift/Kotlin output",
+        "Push notifications & auth flows",
+        "App store submission assets",
+        "Offline-first architecture"
+      ],
+      "example": {
+        "prompt": "Build a fitness tracking app with workout logging, progress charts, and social sharing",
+        "output": "iOS + Android app\n48 screens · REST API\nAuth + notifications\nApp Store ready"
+      },
+      "id": "EfeQHn87yIpLXRLqksdNt"
+    },
+    {
+      "title": "Custom Software Solutions",
+      "tag": "Web & Backend",
+      "desc": "From SaaS platforms to internal tools, the agent designs the architecture, writes the code, and delivers a deployable full-stack solution tailored to your requirements.",
+      "bullets": [
+        "Full-stack web applications",
+        "REST & GraphQL APIs",
+        "Database design & migrations",
+        "CI/CD pipeline setup"
+      ],
+      "example": {
+        "prompt": "Create a multi-tenant SaaS dashboard with billing, user roles, and analytics",
+        "output": "React + Node.js\nStripe billing · RBAC\nPostgres + Redis\nDocker + CI/CD"
+      },
+      "id": "omJWHVzWgLmMMK2qZAG6A"
+    },
+    {
+      "title": "Agentic AI Systems",
+      "tag": "AI & Automation",
+      "desc": "Build autonomous AI agents that reason, plan, and execute multi-step workflows. From customer service bots to complex data pipelines — the agent builds the agent.",
+      "bullets": [
+        "Multi-step reasoning chains",
+        "Tool use & API integrations",
+        "RAG pipelines & vector stores",
+        "Human-in-the-loop workflows"
+      ],
+      "example": {
+        "prompt": "Build an AI agent that monitors competitor pricing and sends weekly digest reports",
+        "output": "Autonomous agent\nWeb scraping · LLM\nScheduled reports\nSlack + email alerts"
+      },
+      "id": "2RLqZKnMQAaekmmTglZjQ"
+    },
+    {
+      "title": "Enterprise Integrations",
+      "tag": "Systems & APIs",
+      "desc": "Connect disparate systems, automate workflows, and build the glue code your enterprise needs. The agent handles the complexity of legacy systems and modern APIs alike.",
+      "bullets": [
+        "ERP & CRM connectors",
+        "ETL pipelines & data sync",
+        "Webhook orchestration",
+        "Legacy system modernization"
+      ],
+      "example": {
+        "prompt": "Integrate Salesforce, HubSpot, and our internal CRM with real-time bidirectional sync",
+        "output": "Event-driven sync\n3 CRM connectors\nConflict resolution\nAudit logging"
+      },
+      "id": "UtCPgvqs_rhBpOu1v3hbZ"
+    },
+    {
+      "title": "Games & Internal Products",
+      "tag": "Original IP",
+      "desc": "SynTract Labs doesn't just build for clients — we develop and ship original games and software products under our own brand. Our internal studio runs alongside client work.",
+      "bullets": [
+        "Mobile & PC game development",
+        "Original IP owned by SynTract Labs",
+        "Cross-platform publishing",
+        "Ongoing updates & live ops"
+      ],
+      "example": {
+        "prompt": "Internal: build and ship a mobile puzzle game with daily challenges and leaderboards",
+        "output": "iOS + Android game\nDaily challenge engine\nGlobal leaderboards\nApp Store published"
+      },
+      "id": "Xk9mPqRsTuVwYzAbCdEfG"
+    }
+  ],
+  "howItWorks": [
+    {
+      "step": "01",
+      "title": "Describe your vision",
+      "body": "Tell the agent what you want to build in plain language. No technical specs required — describe the problem, the users, and the outcome you need.",
+      "id": "7lhGzqVUoPYD4C_aizqeY"
+    },
+    {
+      "step": "02",
+      "title": "Agent architects the solution",
+      "body": "The AI analyzes your requirements, selects the optimal tech stack, designs the architecture, and breaks the build into structured milestones.",
+      "id": "jem54-OJfhLPcr1BPCKo6"
+    },
+    {
+      "step": "03",
+      "title": "Iterative development",
+      "body": "The agent writes, tests, and refines the code in real time. You review progress at each milestone and steer the direction with natural language feedback.",
+      "id": "YlnEPouN3Ehj2MfZ_sxKZ"
+    },
+    {
+      "step": "04",
+      "title": "Deploy & iterate",
+      "body": "Receive production-ready code with deployment scripts, documentation, and test coverage. Continue iterating with the agent as your product evolves.",
+      "id": "gaXk96LT_0MMpS0i8Onbp"
+    }
+  ],
+  "stats": [
+    {
+      "value": "10×",
+      "label": "Faster than traditional development",
+      "mono": "avg_speedup: 10x",
+      "id": "e6S-_VWQYaJDEMwiqS_Q1"
+    },
+    {
+      "value": "94%",
+      "label": "Of builds deploy without manual fixes",
+      "mono": "deploy_success: 0.94",
+      "id": "AJZK5XUbiFsEeZ3fLNROX"
+    },
+    {
+      "value": "150+",
+      "label": "Frameworks and languages supported",
+      "mono": "stack_coverage: 150+",
+      "id": "xdiEHM0N3bZPmuFR-rdl7"
+    },
+    {
+      "value": "< 2h",
+      "label": "Average time to first working prototype",
+      "mono": "time_to_prototype: \"< 2h\"",
+      "id": "No2F1he_lGKgaNVha7_Gq"
+    }
+  ],
+  "useCases": [
+    {
+      "title": "Startups",
+      "body": "Go from idea to MVP in days, not months. Validate your concept with a real product before committing to a full engineering team.",
+      "id": "tBiDsBdASrpNXdpJP-TJg"
+    },
+    {
+      "title": "Enterprises",
+      "body": "Accelerate internal tooling, automate workflows, and modernize legacy systems without pulling your core engineering team off roadmap work.",
+      "id": "tSGwsjgAlJwhBItGIQdSS"
+    },
+    {
+      "title": "Agencies",
+      "body": "Deliver client projects faster and at higher margins. Use the agent to handle boilerplate and scaffolding while your team focuses on differentiation.",
+      "id": "-PhnLx-fCcQnImZkmY-u0"
+    },
+    {
+      "title": "Solo Founders",
+      "body": "Build the technical product you envisioned without a co-founder. The agent is your on-demand engineering team, available 24/7.",
+      "id": "wS0l4d1sglTdwyyxis7V1"
+    }
+  ]
+}

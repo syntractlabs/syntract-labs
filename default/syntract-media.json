@@ -1,0 +1,37 @@
+{
+  "version": "1.0.0",
+  "brand": "SynTract Labs",
+  "media": {
+    "logos": {
+      "horizontal": "/assets/syntract-labs-wordmark.png",
+      "square": "/assets/syntract-labs-icon.png",
+      "icon": "/assets/syntract-labs-icon.png"
+    },
+    "og": {
+      "image": "/og-image.svg",
+      "width": 1200,
+      "height": 630
+    },
+    "favicon": "/favicon.ico"
+  },
+  "products": {
+    "beacon": {
+      "name": "SynTract Beacon",
+      "color": "#2563EB",
+      "icon": "/assets/beacon-icon.svg",
+      "tagline": "Your clients, always guided home."
+    },
+    "cortex": {
+      "name": "SynTract Cortex",
+      "color": "#7C3AED",
+      "icon": "/assets/cortex-icon.svg",
+      "tagline": "Agent orchestration, fully in your control."
+    },
+    "shield": {
+      "name": "SynTract Shield",
+      "color": "#DC2626",
+      "icon": "/assets/shield-icon.svg",
+      "tagline": "Coverage that never sleeps."
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "brand": "SynTract Labs",
+  "media": {
+    "logos": {
+      "horizontal": "/assets/syntract-labs-wordmark.png",
+      "square": "/assets/syntract-labs-icon.png",
+      "icon": "/assets/syntract-labs-icon.png"
+    },
+    "og": {
+      "image": "/og-image.svg",
+      "width": 1200,
+      "height": 630
+    },
+    "favicon": "/favicon.ico"
+  }
+}
