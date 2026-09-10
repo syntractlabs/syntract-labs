@@ -32,11 +32,11 @@ export function getDatabaseCredentials(): DatabaseCredentials {
         }
       }
     } catch {
-      // fall through to env vars
+      // fall through
     }
   }
 
-  // 2. DATABASE_URL connection string (Railway MySQL plugin, PlanetScale, etc.)
+  // 2. DATABASE_URL connection string — fall through on any parse error
   if (env.DATABASE_URL) {
     try {
       const url = new URL(env.DATABASE_URL);
@@ -48,11 +48,11 @@ export function getDatabaseCredentials(): DatabaseCredentials {
         database: url.pathname.replace(/^\//, ''),
       };
     } catch {
-      throw new Error('DATABASE_URL is set but could not be parsed as a valid MySQL URL.');
+      // fall through to individual env vars
     }
   }
 
-  // 3. Individual env vars — supports Railway MySQL plugin naming and custom naming
+  // 3. Individual env vars — Railway MySQL plugin injects MYSQL* automatically
   const host     = env.DB_HOST     || env.MYSQLHOST;
   const port     = env.DB_PORT     || env.MYSQLPORT;
   const user     = env.DB_USER     || env.MYSQLUSER;
