@@ -2,11 +2,9 @@ import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
+import { contentPlugin } from "./export-plugins/content-plugin/index.ts";
+import { mediaAssetsPlugin } from "./export-plugins/media-assets-plugin.ts";
 
-
-
-
-import { contentPlugin } from "./export-plugins/content-plugin/index.ts";import { mediaAssetsPlugin } from "./export-plugins/media-assets-plugin.ts";
 function extractHostname(value: string): string {
   try {
     if (value.includes("://")) {
@@ -17,16 +15,8 @@ function extractHostname(value: string): string {
     return value;
   }
 }
+
 function betterAuthOtelPatchPlugin(): Plugin {
-  // When Vite bundles better-auth for SSR production, the dynamic
-  // import("@opentelemetry/api") inside @better-auth/core's instrumentation/api.mjs
-  // resolves to an empty module (since @opentelemetry/api isn't installed).
-  // This sets openTelemetryAPI = {} instead of leaving it undefined, so the
-  // `?? noopOpenTelemetryAPI` fallback never fires, and trace/SpanStatusCode
-  // are undefined — crashing every auth request.
-  //
-  // Fix: resolve @opentelemetry/api to a proper noop so the dynamic import
-  // always returns a working stub regardless of whether the package is installed.
   return {
     name: "better-auth-otel-patch",
     resolveId(id) {
@@ -63,15 +53,13 @@ export default { SpanStatusCode, trace };
     }
   };
 }
+
 function apiDevPlugin(): Plugin {
   return {
     name: "api-dev",
     apply: "serve",
     configureServer(server: ViteDevServer) {
       server.middlewares.use(async (req, res, next) => {
-        // Proxy /api/* and /preview/* to Express — /preview/:jobId serves
-        // generated HTML files from /private/previews/ and must not be
-        // intercepted by Vite's SPA fallback.
         const url = req.url ?? "";
         if (!url.startsWith("/api") && !url.startsWith("/preview")) return next();
         try {
@@ -86,8 +74,10 @@ function apiDevPlugin(): Plugin {
     }
   };
 }
+
 const allowedHosts: string[] = [];
 const corsOrigins: string[] = [];
+
 if (process.env.FRONTEND_DOMAIN) {
   const frontendHost = extractHostname(process.env.FRONTEND_DOMAIN);
   allowedHosts.push(frontendHost);
@@ -108,19 +98,20 @@ if (allowedHosts.length === 0) {
 if (corsOrigins.length === 0) {
   corsOrigins.push("*");
 }
-export default defineConfig(({
-  mode,
-  isSsrBuild
-}) => ({
+
+export default defineConfig(({ mode, isSsrBuild }) => ({
   envPrefix: ["VITE_", "SITE_"],
-  plugins: [contentPlugin(), react({
-    babel: {
-      plugins: []
-    }
-  }), apiDevPlugin(), mediaAssetsPlugin(), betterAuthOtelPatchPlugin()],
+  plugins: [
+    contentPlugin(),
+    react({ babel: { plugins: [] } }),
+    apiDevPlugin(),
+    mediaAssetsPlugin(),
+    betterAuthOtelPatchPlugin()
+  ],
   resolve: {
     dedupe: ["react", "react-dom", "react-router"],
     alias: {
+      "#airo/secrets": path.resolve(__dirname, "./export-plugins/secrets.ts"),
       nothing: "/src/fallbacks/missingModule.ts",
       "@/api": path.resolve(__dirname, "./src/server/api"),
       "@": path.resolve(__dirname, "./src")
@@ -144,12 +135,8 @@ export default defineConfig(({
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization", "Accept", "User-Agent"]
     },
-    hmr: {
-      overlay: false
-    },
-    watch: {
-      ignored: ["**/dist/**"]
-    }
+    hmr: { overlay: false },
+    watch: { ignored: ["**/dist/**"] }
   },
   preview: {
     host: process.env.HOST || "0.0.0.0",
@@ -184,7 +171,21 @@ export default defineConfig(({
       output: {
         manualChunks: {
           "react-vendor": ["react", "react-dom"],
-          "radix-ui": ["@radix-ui/react-accordion", "@radix-ui/react-alert-dialog", "@radix-ui/react-aspect-ratio", "@radix-ui/react-avatar", "@radix-ui/react-checkbox", "@radix-ui/react-collapsible", "@radix-ui/react-context-menu", "@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu", "@radix-ui/react-hover-card", "@radix-ui/react-label", "@radix-ui/react-menubar", "@radix-ui/react-navigation-menu", "@radix-ui/react-popover", "@radix-ui/react-progress", "@radix-ui/react-scroll-area", "@radix-ui/react-select", "@radix-ui/react-separator", "@radix-ui/react-slider", "@radix-ui/react-slot", "@radix-ui/react-switch", "@radix-ui/react-tabs", "@radix-ui/react-toast", "@radix-ui/react-toggle", "@radix-ui/react-toggle-group", "@radix-ui/react-tooltip"],
+          "radix-ui": [
+            "@radix-ui/react-accordion", "@radix-ui/react-alert-dialog",
+            "@radix-ui/react-aspect-ratio", "@radix-ui/react-avatar",
+            "@radix-ui/react-checkbox", "@radix-ui/react-collapsible",
+            "@radix-ui/react-context-menu", "@radix-ui/react-dialog",
+            "@radix-ui/react-dropdown-menu", "@radix-ui/react-hover-card",
+            "@radix-ui/react-label", "@radix-ui/react-menubar",
+            "@radix-ui/react-navigation-menu", "@radix-ui/react-popover",
+            "@radix-ui/react-progress", "@radix-ui/react-scroll-area",
+            "@radix-ui/react-select", "@radix-ui/react-separator",
+            "@radix-ui/react-slider", "@radix-ui/react-slot",
+            "@radix-ui/react-switch", "@radix-ui/react-tabs",
+            "@radix-ui/react-toast", "@radix-ui/react-toggle",
+            "@radix-ui/react-toggle-group", "@radix-ui/react-tooltip"
+          ],
           query: ["@tanstack/react-query"]
         }
       }
