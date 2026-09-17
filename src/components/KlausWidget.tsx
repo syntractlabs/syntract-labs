@@ -6,8 +6,8 @@ type LeadPhase = "idle" | "ask_name" | "ask_email" | "done";
 
 const INTRO: string[] = [
   "I am Klaus.",
-  "Archon of SynTract CorTex — an autonomous orchestration platform engineered to deploy precision-built sub-agents across digital and physical domains.",
-  "I command three forces.\n\n01 · Build Engine\nAutonomous creation. Designs, engineers, and deploys production-ready software, agents, and digital systems — end-to-end, without human scaffolding.\n\n02 · Scout\nAutonomous real estate intelligence. Infiltrates markets, surfaces listings, delivers neighborhood intelligence, and reads buyer and seller intent — turning raw signals into actionable opportunity.\n\n03 · Shield (Coming Soon)\nAutonomous insurance operations. Speaks the language of risk, drafts carrier-grade communications, manages compliance calendars, and prepares underwriting files — with the precision of a seasoned broker.",
+  "Archon of SynTract CorTex — an autonomous platform engineered to deploy precision-built sub-agents across digital and physical domains.",
+  "I command three forces.\n\n01 · Build Engine\nAutonomous creation.\n\n02 · Scout\nAutonomous real estate intelligence.\n\n03 · Shield (Coming Soon)\nAutonomous insurance operations.",
   "State your business.",
 ];
 
