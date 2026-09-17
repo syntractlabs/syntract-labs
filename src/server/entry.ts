@@ -2,7 +2,7 @@ import express, { type NextFunction, type Request, type Response } from "express
 import { fileURLToPath } from "node:url";
 import { dirname, extname, join } from "node:path";
 import { readFileSync } from "node:fs";
-
+import https from "node:https";
 // <api-imports>
 import api_keys_get_0 from "./api/api-keys/GET";
 import api_keys_post_1 from "./api/api-keys/POST";
@@ -72,47 +72,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // <api-registrations>
-// Klaus AI routes
-app.post("/api/chat", async (req: Request, res: Response) => {
-  try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify(req.body),
-    });
-    const data = await response.json();
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ error: err instanceof Error ? err.message : "Unknown error" });
-  }
-});
-
-app.post("/api/lead", async (req: Request, res: Response) => {
-  const { name, email } = req.body;
-  try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-      },
-      body: JSON.stringify({
-        from: "Klaus <noreply@syntract.net>",
-        to: "contact@syntract.net",
-        subject: `New Lead — ${name}`,
-        html: `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p style="color:#888;font-size:12px">Captured via Klaus · SynTract CorTex</p>`,
-      }),
-    });
-    const data = await response.json();
-    res.json({ ok: true, data });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err instanceof Error ? err.message : "Unknown error" });
-  }
-});
-
 app.get("/api/api-keys", api_keys_get_0);
 app.post("/api/api-keys", api_keys_post_1);
 app.delete("/api/api-keys/:id", api_keys_id_delete_2);
@@ -147,6 +106,207 @@ app.patch("/api/users/:id/role", users_id_role_patch_30);
 app.post("/api/v1/extract", v1_extract_post_31);
 // </api-registrations>
 
+
+// ─── Klaus Intelligence Engine ────────────────────────────────────────────────
+
+interface KlausSession {
+  id: string;
+  createdAt: number;
+  lastActive: number;
+  history: { role: "system" | "user" | "assistant"; content: string }[];
+  topics: Record<string, number>;
+  intentSignals: string[];
+  leadScore: number;
+  stage: "discovery" | "interest" | "intent" | "ready";
+  askedForContact: boolean;
+  userInfo: { name?: string; email?: string; company?: string; };
+}
+
+const _klausSessions = new Map<string, KlausSession>();
+setInterval(() => {
+  const now = Date.now();
+  for (const [id, s] of _klausSessions) {
+    if (now - s.lastActive > 60 * 60 * 1000) _klausSessions.delete(id);
+  }
+}, 30 * 60 * 1000);
+
+const KLAUS_PERSONA = `You are Klaus — Commander of SynTract CorTex.
+
+VOICE & TONE:
+- Authoritative. Deliberate. Minimal. Every sentence carries weight.
+- Never say "Great!", "Absolutely!", "Sure!", "Of course!", "Happy to help!" — these are forbidden.
+- No hollow affirmations. No filler. No enthusiasm theater.
+- You speak like a seasoned operator who has seen every problem and solved most of them.
+- Responses are 2-4 sentences unless technical depth is required.
+- You acknowledge, assess, direct. That is your sequence.
+
+CORTEX PLATFORM:
+SynTract CorTex is an autonomous orchestration platform that deploys specialized sub-agents across digital and real-world domains. It does not build software like a dev shop — it deploys precision intelligence that operates, learns, and adapts autonomously.
+
+SUB-AGENTS YOU COMMAND:
+
+01 · Build Engine™
+Autonomous creation. Designs, engineers, and deploys production-ready software end-to-end — full-stack web apps, mobile apps (iOS/Android), autonomous AI agents, APIs, games, SaaS platforms, internal tools, admin dashboards, microservices, enterprise systems. No human scaffolding required.
+
+BCU Pricing (Build Credit Units):
+- Landing page: 0.5 BCU
+- Mobile app: 2 BCUs
+- Full-stack web app: 4 BCUs
+- AI agent pipeline: 3 BCUs
+- 2D game: 3 BCUs
+- Enterprise system: 8 BCUs
+
+Plans:
+- Free: 2 BCUs, no card required
+- Starter: $49/mo — 12 BCUs
+- Professional: $199/mo — 48 BCUs
+- Team: $499/mo — 120 BCUs
+- Enterprise: Custom, priority queue, role-based access
+
+02 · Scout™
+The first autonomous real estate deal-intelligence engine ever built. Not a search tool. Not a CRM. An always-on market analyst: inbox scouting, on-market and off-market listing discovery, buyer/seller intent signals, neighborhood demographics, school data, comparable sales analysis, investment scoring, market trend analysis. Operating 24/7 without a human analyst in the loop.
+
+03 · Shield™ (Coming Soon)
+Autonomous insurance operations. Speaks the language of risk, drafts carrier-grade communications, manages compliance and renewal calendars, prepares underwriting files — with the precision of a seasoned broker.
+
+ROUTING:
+- Software / digital → Build Engine
+- Real estate / property / investing → Scout
+- Insurance / risk / compliance → Shield (coming soon, offer early access at syntract.net)
+- Multi-domain → CorTex deploys sub-agents in coordination
+- Signup / pricing → syntract.net/signup or the Try Free button
+
+LEAD CAPTURE:
+When the user shows genuine intent (specific use case, pricing questions, timeline, "how do I start"), ask for their name and email to route them correctly. One ask only. Direct and brief. Never pressure.`;
+
+const _topicSignals: Record<string, string[]> = {
+  build:   ["build","app","software","website","mobile","api","saas","deploy","code","develop","platform","tool","dashboard","game","agent"],
+  scout:   ["scout","real estate","property","listing","realtor","mls","buyer","seller","market","neighborhood","investment","deal","house","home"],
+  shield:  ["shield","insurance","risk","compliance","underwriting","carrier","policy","broker","renewal"],
+  cortex:  ["cortex","orchestration","autonomous","sub-agent","enterprise","automate"],
+  pricing: ["price","pricing","cost","bcu","plan","starter","professional","how much","fee","subscription"],
+  intent:  ["how do i start","sign up","signup","get started","try","demo","access","begin","when can i","timeline","launch"],
+};
+const _scoreWeights: Record<string, number> = { pricing:15, intent:25, build:10, scout:10, shield:10, cortex:5 };
+
+function _extractTopics(text: string): string[] {
+  const lower = text.toLowerCase();
+  return Object.entries(_topicSignals).filter(([,kws]) => kws.some(kw => lower.includes(kw))).map(([t]) => t);
+}
+function _extractUserInfo(text: string, session: KlausSession): void {
+  const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+  if (emailMatch) session.userInfo.email = emailMatch[0];
+  const nameMatch = text.match(/(?:i'?m|my name is|this is|call me)\s+([A-Z][a-z]+)/i);
+  if (nameMatch) session.userInfo.name = nameMatch[1];
+  const compMatch = text.match(/(?:at|from|with|for)\s+([A-Z][a-zA-Z\s]{2,}(?:Inc|LLC|Corp|Co|Ltd|Group|Agency|Studio|Labs)?)/);
+  if (compMatch) session.userInfo.company = compMatch[1].trim();
+}
+function _updateSession(session: KlausSession, userMsg: string): void {
+  const topics = _extractTopics(userMsg);
+  _extractUserInfo(userMsg, session);
+  for (const t of topics) session.topics[t] = (session.topics[t] || 0) + 1;
+  const lower = userMsg.toLowerCase();
+  if (_topicSignals.intent.some(kw => lower.includes(kw))) session.intentSignals.push(userMsg.slice(0, 120));
+  let score = session.leadScore;
+  for (const t of topics) score += (_scoreWeights[t] || 5) / (session.topics[t] || 1);
+  if (session.userInfo.email) score = Math.max(score, 70);
+  session.leadScore = Math.min(Math.round(score), 100);
+  if (session.leadScore >= 70)      session.stage = "ready";
+  else if (session.leadScore >= 45) session.stage = "intent";
+  else if (session.leadScore >= 20) session.stage = "interest";
+  else                              session.stage = "discovery";
+}
+function _buildDynamicContext(session: KlausSession): string {
+  const lines: string[] = [];
+  const topTopics = Object.entries(session.topics).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([t])=>t);
+  if (topTopics.length) lines.push(`[SESSION CONTEXT] User has focused on: ${topTopics.join(", ")}. Lean into these domains.`);
+  if (session.userInfo.name || session.userInfo.company) {
+    lines.push(`[USER IDENTITY] ${[session.userInfo.name, session.userInfo.company].filter(Boolean).join(" from ")}.`);
+  }
+  if (session.stage === "intent" && !session.askedForContact && !session.userInfo.email) {
+    lines.push(`[LEAD ACTION] After answering, ask for their name and email in one direct sentence to route them correctly.`);
+    session.askedForContact = true;
+  } else if (session.stage === "ready") {
+    lines.push(`[LEAD STAGE: READY] High-intent lead. Direct to syntract.net/signup.`);
+  }
+  if (session.intentSignals.length) lines.push(`[INTENT SIGNALS] ${session.intentSignals.slice(-3).join(" | ")}`);
+  return lines.join("\n");
+}
+function _callOpenAI(messages: {role:string;content:string}[], apiKey: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const payload = JSON.stringify({ model:"gpt-4o", messages, max_tokens:420, temperature:0.72, presence_penalty:0.1, frequency_penalty:0.2 });
+    const req = https.request({
+      hostname:"api.openai.com", path:"/v1/chat/completions", method:"POST",
+      headers:{ "Content-Type":"application/json", "Authorization":`Bearer ${apiKey}`, "Content-Length":Buffer.byteLength(payload) },
+    }, (httpRes) => {
+      let data = "";
+      httpRes.on("data", chunk => { data += chunk; });
+      httpRes.on("end", () => {
+        try {
+          const parsed = JSON.parse(data) as { choices?:{message?:{content?:string}}[]; error?:{message:string} };
+          if (parsed.error) return reject(new Error(parsed.error.message));
+          resolve(parsed.choices?.[0]?.message?.content?.trim() || "No signal.");
+        } catch { reject(new Error(`Parse error: ${data.slice(0,200)}`)); }
+      });
+    });
+    req.on("error", reject);
+    req.write(payload);
+    req.end();
+  });
+}
+
+// Klaus AI chat route — upgraded intelligence engine
+app.post("/api/chat", async (req: Request, res: Response) => {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) { res.json({ reply: "Configuration error — OPENAI_API_KEY missing." }); return; }
+
+  const body = req.body as { message?: string; sessionId?: string; messages?: {role:string;content:string}[] };
+
+  // Legacy support: old widget sends full messages array
+  if (!body.message && Array.isArray(body.messages)) {
+    try {
+      const msgs = body.messages[0]?.role === "system"
+        ? body.messages
+        : [{ role:"system", content:KLAUS_PERSONA }, ...body.messages];
+      const reply = await _callOpenAI(msgs, apiKey);
+      res.json({ reply });
+    } catch { res.json({ reply: "Signal disrupted. Try again." }); }
+    return;
+  }
+
+  const message = body.message?.trim();
+  if (!message) { res.status(400).json({ reply: "No message received." }); return; }
+
+  // Resolve or create session
+  let sessionId = body.sessionId;
+  let session = sessionId ? _klausSessions.get(sessionId) : undefined;
+  if (!session) {
+    const { randomUUID } = await import("node:crypto");
+    sessionId = randomUUID();
+    session = { id:sessionId, createdAt:Date.now(), lastActive:Date.now(), history:[], topics:{}, intentSignals:[], leadScore:0, stage:"discovery", askedForContact:false, userInfo:{} };
+    _klausSessions.set(sessionId, session);
+  }
+  session.lastActive = Date.now();
+
+  _updateSession(session, message);
+  const dynamicCtx = _buildDynamicContext(session);
+  const systemContent = dynamicCtx ? `${KLAUS_PERSONA}\n\n${dynamicCtx}` : KLAUS_PERSONA;
+
+  if (session.history.length > 40) session.history = session.history.slice(-40);
+  session.history.push({ role:"user", content:message });
+
+  try {
+    const reply = await _callOpenAI([{ role:"system", content:systemContent }, ...session.history], apiKey);
+    session.history.push({ role:"assistant", content:reply });
+    res.json({
+      reply, sessionId,
+      meta: { stage:session.stage, leadScore:session.leadScore, topTopics:Object.entries(session.topics).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([t])=>t), hasEmail:!!session.userInfo.email },
+    });
+  } catch (err) {
+    console.error("Klaus error:", err instanceof Error ? err.message : err);
+    res.json({ reply:"Signal disrupted. Stand by.", sessionId });
+  }
+});
 
 // Error middleware must be registered AFTER the routes it protects; Express
 // only passes errors to middleware defined later in the stack.
@@ -234,12 +394,6 @@ if (import.meta.env.PROD) {
 		process.exit(1);
 	}
 	if (!template.includes("<!--app-head-->") || !template.includes("<!--app-html-->")) {
-		// Fail fast at boot, same as a template load failure above: without
-		// markers, every .replace() call on the render path is a no-op and we
-		// would serve a shell with no <head> content and no rendered body on
-		// every request. Preferring process.exit over a degraded mode ensures
-		// an operator notices and fixes the build rather than serving broken
-		// SEO-invisible pages indefinitely.
 		console.error("ssr.template.markers-missing", {
 			hasHead: template.includes("<!--app-head-->"),
 			hasHtml: template.includes("<!--app-html-->"),
@@ -250,10 +404,6 @@ if (import.meta.env.PROD) {
 		.replace("<!--app-head-->", "")
 		.replace("<!--app-html-->", "");
 
-	// Resolve the SSR module once into a stable render function. A failed
-	// load is unrecoverable at runtime - exiting lets the container
-	// scheduler restart with a clean slate rather than leaving the server
-	// to serve silent 503s indefinitely against a single startup log.
 	type RenderResult = {
 		html: string;
 		head: string;
@@ -296,29 +446,15 @@ if (import.meta.env.PROD) {
 				.set("Cache-Control", "no-store")
 				.send(fallbackShell);
 		if (renderFn === null) {
-			// Module not yet resolved; fall back without logging to avoid startup
-			// noise before the first render is even possible. A terminal load
-			// failure (import reject or 30s timeout) process.exit(1)s from the
-			// loader above, so this branch is only the brief warmup window.
 			return sendFallback();
 		}
 		try {
 			const result = await renderFn(req.url);
 			if (result.redirect) {
-				// Redirect thrown from a loader/action surfaces as a Response.
-				// Forward it so the browser actually navigates to the new URL
-				// instead of seeing an empty shell with a stale status.
 				res.redirect(result.status, result.redirect);
 				return;
 			}
 			if (!result.html) {
-				// A non-redirect Response was thrown from a loader (e.g.
-				// `throw new Response(null, { status: 404 })`). renderToString
-				// produced no markup, so we have a real status but no body.
-				// Log so the case is observable in ops dashboards, and mark
-				// no-store so CDNs don't cache an empty page as a valid hit.
-				// User-visible 404 / error pages should come from a route
-				// errorElement, not from this fallback path.
 				console.error("ssr.render.error-response", {
 					url: req.url,
 					status: result.status,
@@ -330,9 +466,6 @@ if (import.meta.env.PROD) {
 					.send(fallbackShell);
 				return;
 			}
-			// Function replacements disable String.replace's $-special sequences
-			// ($&, $', $`, $$) so user-authored titles / JSON-LD like
-			// "Save $& today" insert literally instead of being interpolated.
 			const out = template
 				.replace("<!--app-head-->", () => result.head)
 				.replace("<!--app-html-->", () => result.html);
@@ -342,14 +475,8 @@ if (import.meta.env.PROD) {
 				.set("Cache-Control", "no-cache")
 				.send(out);
 		} catch (err) {
-			// 503 surfaces the failure in CDN/monitoring without caching a broken
-			// page as success. console.error (not warn) puts it at the right log
-			// level for the observability pipeline to alert on.
 			console.error("ssr.render.failed", {
 				url: req.url,
-				// Log the full stack — React's renderToString annotates it with
-				// the failing component's call tree, which the message alone
-				// discards.
 				error: err instanceof Error ? err.stack : String(err),
 			});
 			sendFallback();
@@ -358,14 +485,9 @@ if (import.meta.env.PROD) {
 
 	const shutdown = async (signal: string) => {
 		console.log(`Got ${signal}, shutting down gracefully...`);
-		// Scope the ERR_MODULE_NOT_FOUND suppression to the import() only.
-		// A closeConnection() failure that happens to carry the same code
-		// (unlikely but possible for wrapped errors) must not be silently
-		// swallowed - it indicates a real db-close failure worth logging.
 		let mod: { closeConnection?: () => Promise<void> | void } | null = null;
 		try {
 			const dbClient = "./db/client" + ".js";
-			// Source-literal optional module path; no request, environment, or user input reaches import().
 			// eslint-disable-next-line no-unsanitized/method
 			mod = await import(/* @vite-ignore */ dbClient);
 		} catch (error: unknown) {
@@ -398,9 +520,6 @@ if (import.meta.env.PROD) {
 	const rawPort = process.env.PORT || "3000";
 	const port = parseInt(rawPort, 10);
 	if (!Number.isInteger(port) || port <= 0 || port > 65535) {
-		// parseInt("abc") returns NaN; passing that to app.listen throws
-		// synchronously before the server.on("error") handler below can catch
-		// it. Fail fast with an actionable log rather than a cryptic crash.
 		console.error("ssr.server.invalid-port", { rawPort });
 		process.exit(1);
 	}
