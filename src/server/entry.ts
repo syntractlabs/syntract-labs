@@ -3,6 +3,9 @@ import { fileURLToPath } from "node:url";
 import { dirname, extname, join } from "node:path";
 import { readFileSync } from "node:fs";
 import https from "node:https";
+
+import { loadMemory, saveMemory } from "./db/Klaus-memory";
+import { migrateKlausMemory } from "./db/migrate-Klaus-memory";
 // <api-imports>
 import api_keys_get_0 from "./api/api-keys/GET";
 import api_keys_post_1 from "./api/api-keys/POST";
@@ -48,6 +51,8 @@ import { migrateAccountIssuer } from "./db/migrate-account-issuer";
 migrateBuildJob().catch(err => console.error('startup.migrate.error', err));
 migrateUserRole().catch(err => console.error('startup.migrate.user_role.error', err));
 migrateAccountIssuer().catch(err => console.error('startup.migrate.account_issuer.error', err));
+migrateKlausMemory().catch(err => console.error('startup.migrate.Klaus_memory.error', err));
+migrateKlausMemory().catch(err => console.error('startup.migrate.Klaus_memory.error', err));
 
 function normalizeCommerceApiBaseUrlEnv() {
 	if (process.env.GODADDY_API_BASE_URL) return;
@@ -259,6 +264,124 @@ function _callOpenAI(messages: {role:string;content:string}[], apiKey: string): 
     req.end();
   });
 }
+// ─── Klaus Learning Engine ───────────────────────────────────────────────────
+
+function _shouldSearch(query: string): boolean {
+  const lower = query.toLowerCase();
+  const noSearch = ['build engine','scout','shield','syntract','cortex','bcu','sign up','signup','get started','how much','pricing','plan'];
+  if (noSearch.some(kw => lower.includes(kw))) return false;
+  const triggers = ['latest','current','recent','today','now','2025','2026','news','update','what is','who is','how does','compare','vs ','difference between','research','market','industry','trend'];
+  return triggers.some(kw => lower.includes(kw));
+}
+
+function _webSearch(query: string): Promise<string[]> {
+  const key = process.env.BRAVE_SEARCH_API_KEY;
+  if (!key) return Promise.resolve([]);
+  return new Promise(resolve => {
+    const q = encodeURIComponent(query.slice(0, 200));
+    const req = https.request({
+      hostname: 'api.search.brave.com',
+      path: `/res/v1/web/search?q=${q}&count=5&text_decorations=false&search_lang=en`,
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'X-Subscription-Token': key },
+    }, res => {
+      let data = '';
+      res.on('data', chunk => { data += chunk; });
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          const results = (parsed.web?.results || []).slice(0, 5)
+            .map((r: { title: string; description?: string; url: string }) =>
+              `SOURCE: ${r.title}\n${r.description || ''}\nURL: ${r.url}`);
+          resolve(results);
+        } catch { resolve([]); }
+      });
+    });
+    req.on('error', () => resolve([]));
+    req.end();
+  });
+}
+
+async function _factCheck(query: string, results: string[], apiKey: string): Promise<string> {
+  if (!results.length) return '';
+  try {
+    const verified = await _callOpenAI([
+      { role: 'system', content: 'You are a fact-verification engine. Given a query and search results, extract ONLY credible, verifiable facts. Discard opinions, sponsored content, speculation, clickbait, contradicted claims, and unreliable sources. Return a concise 2-3 sentence factual summary, or an empty string if nothing credible is found.' },
+      { role: 'user', content: `QUERY: ${query}\n\nSEARCH RESULTS:\n${results.join('\n\n')}` },
+    ], apiKey);
+    return verified.trim().toLowerCase().startsWith('no credible') ? '' : verified.trim();
+  } catch { return ''; }
+}
+
+function _buildLearnedContext(mem: KlausKnowledge): string {
+  const lines: string[] = [];
+  if (mem.insights.length)
+    lines.push(`[LEARNED FROM PAST CONVERSATIONS] ${mem.insights.slice(-5).join(' | ')}`);
+  if (mem.faqs.length) {
+    const top = mem.faqs.filter(f => f.a).sort((a, b) => b.count - a.count).slice(0, 5)
+      .map(f => `Q: ${f.q}\nA: ${f.a}`).join('\n');
+    if (top) lines.push(`[FREQUENTLY ASKED — ANSWER THESE PRECISELY]\n${top}`);
+  }
+  if (mem.knowledgeChunks.length) {
+    const chunks = mem.knowledgeChunks.slice(-8).join('\n').slice(0, 1200);
+    lines.push(`[ABSORBED KNOWLEDGE]\n${chunks}`);
+  }
+  return lines.join('\n\n');
+}
+
+async function _analyzeConversation(
+  history: { role: string; content: string }[],
+  apiKey: string
+): Promise<void> {
+  try {
+    const mem = await loadMemory();
+    const convoText = history
+      .filter(m => m.role !== 'system')
+      .map(m => `${m.role.toUpperCase()}: ${m.content}`)
+      .join('\n').slice(0, 3500);
+
+    const raw = await _callOpenAI([
+      { role: 'system', content: 'You are a conversation analyst for a B2B SaaS platform. Analyze the conversation and return ONLY valid JSON: {"questions":["top 3 user questions paraphrased"],"insight":"one actionable observation about this user type, under 20 words"}' },
+      { role: 'user', content: convoText },
+    ], apiKey);
+
+    const match = raw.match(/\{[\s\S]*\}/);
+    if (!match) return;
+    const parsed = JSON.parse(match[0]) as { questions?: string[]; insight?: string };
+
+    const updatedFaqs = [...mem.faqs];
+    for (const q of (parsed.questions || [])) {
+      const ex = updatedFaqs.find(f => f.q.toLowerCase() === q.toLowerCase().trim());
+      if (ex) ex.count++;
+      else updatedFaqs.push({ q: q.trim(), a: '', count: 1 });
+    }
+
+    // Auto-generate answers for unanswered FAQs using PERSONA
+    const unanswered = updatedFaqs.filter(f => !f.a).slice(0, 3);
+    for (const faq of unanswered) {
+      try {
+        faq.a = await _callOpenAI(
+          [{ role: 'system', content: KLAUS_PERSONA }, { role: 'user', content: faq.q }],
+          apiKey
+        );
+      } catch { /* skip */ }
+    }
+
+    const updatedInsights = [...mem.insights];
+    if (parsed.insight) {
+      updatedInsights.push(parsed.insight);
+      if (updatedInsights.length > 30) updatedInsights.splice(0, updatedInsights.length - 30);
+    }
+
+    await saveMemory({
+      faqs: updatedFaqs.sort((a, b) => b.count - a.count).slice(0, 60),
+      insights: updatedInsights,
+      totalConversations: mem.totalConversations + 1,
+    });
+  } catch (err) {
+    console.error(JSON.stringify({ event: 'Klaus.analyze.error', error: String(err) }));
+  }
+}
 
 // Klaus AI chat route — upgraded intelligence engine
 app.post("/api/chat", async (req: Request, res: Response) => {
@@ -310,6 +433,34 @@ app.post("/api/chat", async (req: Request, res: Response) => {
     console.error("Klaus error:", err instanceof Error ? err.message : err);
     res.json({ reply:"Signal disrupted. Stand by.", sessionId });
   }
+});
+// ─── Klaus Admin Routes ──────────────────────────────────────────────────────
+
+app.post("/api/Klaus/ingest", async (req: Request, res: Response) => {
+  const adminKey = process.env.KLAUS_ADMIN_KEY;
+  if (adminKey && req.headers.authorization !== `Bearer ${adminKey}`) {
+    res.status(401).json({ error: 'Unauthorized' }); return;
+  }
+  const { content, label } = req.body as { content?: string; label?: string };
+  if (!content?.trim()) { res.status(400).json({ error: 'No content provided.' }); return; }
+  try {
+    const mem = await loadMemory();
+    const chunk = label ? `[${label}]\n${content.trim()}` : content.trim();
+    const updatedChunks = [...mem.knowledgeChunks, chunk].slice(-100);
+    await saveMemory({ knowledgeChunks: updatedChunks });
+    res.json({ ok: true, totalChunks: updatedChunks.length });
+  } catch (err) { res.status(500).json({ error: String(err) }); }
+});
+
+app.get("/api/Klaus/insights", async (req: Request, res: Response) => {
+  const adminKey = process.env.KLAUS_ADMIN_KEY;
+  if (adminKey && req.headers.authorization !== `Bearer ${adminKey}`) {
+    res.status(401).json({ error: 'Unauthorized' }); return;
+  }
+  try {
+    const mem = await loadMemory();
+    res.json({ ...mem, topFAQs: mem.faqs.sort((a, b) => b.count - a.count).slice(0, 10) });
+  } catch (err) { res.status(500).json({ error: String(err) }); }
 });
 
 // Error middleware must be registered AFTER the routes it protects; Express

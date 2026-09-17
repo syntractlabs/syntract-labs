@@ -1,5 +1,7 @@
 ﻿import type { Request, Response } from "express";
 import https from "node:https";
+import { loadMemory, saveMemory } from "../../db/Klaus-memory";
+import type { KlausKnowledge } from "../../db/Klaus-memory";
 
 interface KlausSession {
   id: string; lastActive: number;
@@ -103,6 +105,130 @@ function callOpenAI(messages: Array<{role:string;content:string}>, apiKey: strin
     req.write(body);
     req.end();
   });
+}
+// ─── Klaus Learning Engine ───────────────────────────────────────────────────
+
+function _shouldSearch(query: string): boolean {
+  const lower = query.toLowerCase();
+  const noSearch = ['build engine','scout','shield','syntract','cortex','bcu','sign up','signup','get started','how much','pricing','plan'];
+  if (noSearch.some(kw => lower.includes(kw))) return false;
+  const triggers = ['latest','current','recent','today','now','2025','2026','news','update','what is','who is','how does','compare','vs ','difference between','research','market','industry','trend'];
+  return triggers.some(kw => lower.includes(kw));
+}
+
+function _webSearch(query: string): Promise<string[]> {
+  const key = process.env.SERPER_API_KEY;
+  if (!key) return Promise.resolve([]);
+  return new Promise(resolve => {
+    const body = JSON.stringify({ q: query.slice(0, 200), num: 5 });
+    const req = https.request({
+      hostname: 'google.serper.dev',
+      path: '/search',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-KEY': key,
+        'Content-Length': Buffer.byteLength(body),
+      },
+    }, res => {
+      let data = '';
+      res.on('data', chunk => { data += chunk; });
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          const results = (parsed.organic || []).slice(0, 5)
+            .map((r: { title: string; snippet?: string; link: string }) =>
+              `SOURCE: ${r.title}\n${r.snippet || ''}\nURL: ${r.link}`);
+          resolve(results);
+        } catch { resolve([]); }
+      });
+    });
+    req.on('error', () => resolve([]));
+    req.write(body);
+    req.end();
+  });
+}
+
+
+async function _factCheck(query: string, results: string[], apiKey: string): Promise<string> {
+  if (!results.length) return '';
+  try {
+    const verified = await callOpenAI([
+      { role: 'system', content: 'You are a fact-verification engine. Given a query and search results, extract ONLY credible, verifiable facts. Discard opinions, sponsored content, speculation, clickbait, contradicted claims, and unreliable sources. Return a concise 2-3 sentence factual summary, or an empty string if nothing credible is found.' },
+      { role: 'user', content: `QUERY: ${query}\n\nSEARCH RESULTS:\n${results.join('\n\n')}` },
+    ], apiKey);
+    return verified.trim().toLowerCase().startsWith('no credible') ? '' : verified.trim();
+  } catch { return ''; }
+}
+
+function _buildLearnedContext(mem: KlausKnowledge): string {
+  const lines: string[] = [];
+  if (mem.insights.length)
+    lines.push(`[LEARNED FROM PAST CONVERSATIONS] ${mem.insights.slice(-5).join(' | ')}`);
+  if (mem.faqs.length) {
+    const top = mem.faqs.filter(f => f.a).sort((a, b) => b.count - a.count).slice(0, 5)
+      .map(f => `Q: ${f.q}\nA: ${f.a}`).join('\n');
+    if (top) lines.push(`[FREQUENTLY ASKED — ANSWER THESE PRECISELY]\n${top}`);
+  }
+  if (mem.knowledgeChunks.length) {
+    const chunks = mem.knowledgeChunks.slice(-8).join('\n').slice(0, 1200);
+    lines.push(`[ABSORBED KNOWLEDGE]\n${chunks}`);
+  }
+  return lines.join('\n\n');
+}
+
+async function _analyzeConversation(
+  history: { role: string; content: string }[],
+  apiKey: string
+): Promise<void> {
+  try {
+    const mem = await loadMemory();
+    const convoText = history
+      .filter(m => m.role !== 'system')
+      .map(m => `${m.role.toUpperCase()}: ${m.content}`)
+      .join('\n').slice(0, 3500);
+
+    const raw = await callOpenAI([
+      { role: 'system', content: 'You are a conversation analyst for a B2B SaaS platform. Analyze the conversation and return ONLY valid JSON: {"questions":["top 3 user questions paraphrased"],"insight":"one actionable observation about this user type, under 20 words"}' },
+      { role: 'user', content: convoText },
+    ], apiKey);
+
+    const match = raw.match(/\{[\s\S]*\}/);
+    if (!match) return;
+    const parsed = JSON.parse(match[0]) as { questions?: string[]; insight?: string };
+
+    const updatedFaqs = [...mem.faqs];
+    for (const q of (parsed.questions || [])) {
+      const ex = updatedFaqs.find(f => f.q.toLowerCase() === q.toLowerCase().trim());
+      if (ex) ex.count++;
+      else updatedFaqs.push({ q: q.trim(), a: '', count: 1 });
+    }
+
+    // Auto-generate answers for unanswered FAQs in background
+    const unanswered = updatedFaqs.filter(f => !f.a).slice(0, 3);
+    for (const faq of unanswered) {
+      try {
+        faq.a = await callOpenAI(
+          [{ role: 'system', content: PERSONA }, { role: 'user', content: faq.q }],
+          apiKey
+        );
+      } catch { /* skip */ }
+    }
+
+    const updatedInsights = [...mem.insights];
+    if (parsed.insight) {
+      updatedInsights.push(parsed.insight);
+      if (updatedInsights.length > 30) updatedInsights.splice(0, updatedInsights.length - 30);
+    }
+
+    await saveMemory({
+      faqs: updatedFaqs.sort((a, b) => b.count - a.count).slice(0, 60),
+      insights: updatedInsights,
+      totalConversations: mem.totalConversations + 1,
+    });
+  } catch (err) {
+    console.error(JSON.stringify({ event: 'Klaus.analyze.error', error: String(err) }));
+  }
 }
 
 export default async function handler(req: Request, res: Response): Promise<void> {
