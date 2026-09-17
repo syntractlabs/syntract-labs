@@ -155,7 +155,7 @@ export default function KlausWidget() {
         }),
       });
       const data  = await res.json();
-      const reply = data.choices?.[0]?.message?.content?.trim() || data.error?.message || "No response.";
+      const reply = data.reply?.trim() || data.choices?.[0]?.message?.content?.trim() || data.error?.message || "No response.";
       setLoading(false);
       typewrite(reply, () => {
         // Commit reply to rolling history
