@@ -36,24 +36,25 @@ function detectLeadIntent(text: string): boolean {
 }
 
 export default function KlausWidget() {
-  const [open, setOpen]             = useState(false);
-  const [messages, setMessages]     = useState<Message[]>([]);
-  const [history, setHistory]       = useState<HistEntry[]>([{ role: "system", content: SYSTEM_PROMPT }]);
-  const [input, setInput]           = useState("");
-  const [loading, setLoading]       = useState(false);
-  const [typingContent, setTyping]  = useState<string | null>(null);
-  const [cursorOn, setCursorOn]     = useState(true);
-  const [leadPhase, setLeadPhase]   = useState<LeadPhase>("idle");
-  const [leadName, setLeadName]     = useState("");
-  const bottomRef                   = useRef<HTMLDivElement>(null);
-  const introPlayed                 = useRef(false);
-  const intervalRef                 = useRef<ReturnType<typeof setInterval> | null>(null);
-  const leadPhaseRef                = useRef<LeadPhase>("idle");
+  const [open, setOpen]            = useState(false);
+  const [messages, setMessages]    = useState<Message[]>([]);
+  const [history, setHistory]      = useState<HistEntry[]>([{ role: "system", content: SYSTEM_PROMPT }]);
+  const [input, setInput]          = useState("");
+  const [loading, setLoading]      = useState(false);
+  const [typingContent, setTyping] = useState<string | null>(null);
+  const [cursorOn, setCursorOn]    = useState(true);
+  const [leadPhase, setLeadPhase]  = useState<LeadPhase>("idle");
+  const [leadName, setLeadName]    = useState("");
 
-  // Keep ref in sync for use inside closures
+  const bottomRef    = useRef<HTMLDivElement>(null);
+  const introPlayed  = useRef(false);
+  const intervalRef  = useRef<ReturnType<typeof setInterval> | null>(null);
+  const leadPhaseRef = useRef<LeadPhase>("idle");
+  const abortRef     = useRef<AbortController | null>(null);
+  const typingRef    = useRef<string | null>(null);
+
   useEffect(() => { leadPhaseRef.current = leadPhase; }, [leadPhase]);
 
-  // Blinking cursor
   useEffect(() => {
     const t = setInterval(() => setCursorOn(v => !v), 500);
     return () => clearInterval(t);
@@ -70,16 +71,38 @@ export default function KlausWidget() {
     }
   }, [open]);
 
+  function stopAll(commitPartial = true) {
+    if (abortRef.current) {
+      abortRef.current.abort();
+      abortRef.current = null;
+    }
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    const partial = typingRef.current;
+    if (commitPartial && partial && partial.trim()) {
+      setMessages(prev => [...prev, { role: "assistant", content: partial }]);
+    }
+    typingRef.current = null;
+    setTyping(null);
+    setLoading(false);
+  }
+
   function typewrite(text: string, onDone: () => void) {
     if (intervalRef.current) clearInterval(intervalRef.current);
     let i = 0;
     setTyping("");
+    typingRef.current = "";
     intervalRef.current = setInterval(() => {
       i = Math.min(i + 1, text.length);
-      setTyping(text.slice(0, i));
+      const slice = text.slice(0, i);
+      setTyping(slice);
+      typingRef.current = slice;
       if (i >= text.length) {
         clearInterval(intervalRef.current!);
         intervalRef.current = null;
+        typingRef.current = null;
         setTyping(null);
         setMessages(prev => [...prev, { role: "assistant", content: text }]);
         onDone();
@@ -106,22 +129,22 @@ export default function KlausWidget() {
 
   async function send() {
     const msg = input.trim();
-    const isBusy = loading || typingContent !== null;
-    if (!msg || isBusy) return;
+    if (!msg) return;
+
+    const isBusy = loading || typingContent !== null || typingRef.current !== null;
+    if (isBusy) stopAll(true);
 
     setMessages(prev => [...prev, { role: "user", content: msg }]);
     setInput("");
 
-    // ── Lead capture flow ──────────────────────────────────────────
-    if (leadPhase === "ask_name") {
+    if (leadPhaseRef.current === "ask_name") {
       setLeadName(msg);
       setLeadPhase("ask_email");
       leadPhaseRef.current = "ask_email";
       klausSay("And your email address?");
       return;
     }
-
-    if (leadPhase === "ask_email") {
+    if (leadPhaseRef.current === "ask_email") {
       const email = msg;
       setLeadPhase("done");
       leadPhaseRef.current = "done";
@@ -135,18 +158,20 @@ export default function KlausWidget() {
       klausSay(`Received. I'll be in contact, ${leadName}.`);
       return;
     }
-    // ──────────────────────────────────────────────────────────────
 
-    // Normal OpenAI flow
     const next: HistEntry[] = [...history, { role: "user", content: msg }];
     const trimmed: HistEntry[] = next.length > 22 ? [next[0], ...next.slice(-20)] : next;
     setHistory(trimmed);
     setLoading(true);
 
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
           model: "gpt-4o",
           messages: trimmed,
@@ -154,16 +179,15 @@ export default function KlausWidget() {
           temperature: 0.75,
         }),
       });
+      abortRef.current = null;
       const data  = await res.json();
       const reply = data.reply?.trim() || data.choices?.[0]?.message?.content?.trim() || data.error?.message || "No response.";
       setLoading(false);
       typewrite(reply, () => {
-        // Commit reply to rolling history
         setHistory(prev => {
           const updated: HistEntry[] = [...prev, { role: "assistant", content: reply }];
           return updated.length > 22 ? [updated[0], ...updated.slice(-20)] : updated;
         });
-        // Trigger lead capture after reply if intent detected
         if (leadPhaseRef.current === "idle" && detectLeadIntent(msg)) {
           setTimeout(() => {
             setLeadPhase("ask_name");
@@ -173,6 +197,8 @@ export default function KlausWidget() {
         }
       });
     } catch (err: unknown) {
+      abortRef.current = null;
+      if (err instanceof Error && err.name === "AbortError") return;
       setLoading(false);
       const errMsg = err instanceof Error ? err.message : "Signal lost. Try again.";
       setMessages(prev => [...prev, { role: "assistant", content: errMsg }]);
@@ -180,10 +206,10 @@ export default function KlausWidget() {
   }
 
   const isBusy = loading || typingContent !== null;
-
   const placeholder =
     leadPhase === "ask_name"  ? "Your name..." :
     leadPhase === "ask_email" ? "Your email..." :
+    isBusy                    ? "Type to interrupt…" :
     "State your business…";
 
   return (
@@ -200,7 +226,6 @@ export default function KlausWidget() {
           }}>
             KLAUS
           </div>
-
           <div style={{ flex: 1, overflowY: "auto", padding: 12, display: "flex", flexDirection: "column", gap: 8 }}>
             {messages.map((m, i) => (
               <div key={i} style={{
@@ -212,7 +237,6 @@ export default function KlausWidget() {
                 {m.content}
               </div>
             ))}
-
             {typingContent !== null && (
               <div style={{
                 alignSelf: "flex-start", background: "#1a1a1a",
@@ -227,7 +251,6 @@ export default function KlausWidget() {
                 }} />
               </div>
             )}
-
             {loading && typingContent === null && (
               <div style={{ alignSelf: "flex-start", color: "#555", fontSize: 12, fontStyle: "italic", padding: "4px 2px" }}>
                 …
@@ -235,37 +258,55 @@ export default function KlausWidget() {
             )}
             <div ref={bottomRef} />
           </div>
-
           <div style={{ display: "flex", borderTop: "1px solid #222", padding: 8, gap: 8 }}>
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === "Enter" && send()}
               placeholder={placeholder}
-              disabled={isBusy}
               style={{
                 flex: 1, background: "#1a1a1a", border: "1px solid #333",
-                borderRadius: 8, color: isBusy ? "#555" : "#fff",
+                borderRadius: 8, color: "#fff",
                 padding: "8px 10px", fontSize: 13, outline: "none",
               }}
             />
-            <button onClick={send} disabled={isBusy} style={{
-              background: isBusy ? "#1a3a8f" : "#2563eb",
-              border: "none", borderRadius: 8,
-              color: isBusy ? "#444" : "#fff",
-              padding: "8px 14px", cursor: isBusy ? "default" : "pointer", fontSize: 14,
-            }}>
-              ↑
-            </button>
+            {isBusy ? (
+              <button
+                onClick={() => stopAll(true)}
+                title="Stop"
+                style={{
+                  background: "#1a1a1a", border: "1px solid #555", borderRadius: 8,
+                  color: "#ff4444", padding: "8px 14px", cursor: "pointer", fontSize: 14,
+                  lineHeight: 1,
+                }}
+              >
+                &#9632;
+              </button>
+            ) : (
+              <button
+                onClick={send}
+                disabled={!input.trim()}
+                style={{
+                  background: input.trim() ? "#2563eb" : "#1a3a8f",
+                  border: "none", borderRadius: 8,
+                  color: input.trim() ? "#fff" : "#444",
+                  padding: "8px 14px", cursor: input.trim() ? "pointer" : "default", fontSize: 14,
+                }}
+              >
+                &#x2191;
+              </button>
+            )}
           </div>
         </div>
       )}
-
-      <button onClick={() => setOpen(o => !o)} style={{
-        width: 52, height: 52, borderRadius: "50%", background: "#2563eb",
-        border: "none", cursor: "pointer", color: "#fff", fontSize: 22,
-        boxShadow: "0 4px 16px rgba(37,99,235,0.5)", display: "block", marginLeft: "auto",
-      }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          width: 52, height: 52, borderRadius: "50%", background: "#2563eb",
+          border: "none", cursor: "pointer", color: "#fff", fontSize: 22,
+          boxShadow: "0 4px 16px rgba(37,99,235,0.5)", display: "block", marginLeft: "auto",
+        }}
+      >
         {open ? "×" : "💬"}
       </button>
     </div>
