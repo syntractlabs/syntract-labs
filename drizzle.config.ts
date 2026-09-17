@@ -29,6 +29,7 @@ export default defineConfig({
       rejectUnauthorized: false,
     }
   },
+  tablesFilter: ["!Klaus_memory"],
   verbose: true,
   strict: false,
 });
