@@ -122,6 +122,12 @@ interface KlausSession {
   userInfo: { name?: string; email?: string; company?: string; };
 }
 
+function _randomUUID(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
 const _klausSessions = new Map<string, KlausSession>();
 setInterval(() => {
   const now = Date.now();
@@ -280,8 +286,7 @@ app.post("/api/chat", async (req: Request, res: Response) => {
   let sessionId = body.sessionId;
   let session = sessionId ? _klausSessions.get(sessionId) : undefined;
   if (!session) {
-    const { randomUUID } = await import("node:crypto");
-    sessionId = randomUUID();
+    sessionId = _randomUUID();
     session = { id:sessionId, createdAt:Date.now(), lastActive:Date.now(), history:[], topics:{}, intentSignals:[], leadScore:0, stage:"discovery", askedForContact:false, userInfo:{} };
     _klausSessions.set(sessionId, session);
   }
