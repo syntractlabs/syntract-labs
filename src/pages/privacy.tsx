@@ -1,7 +1,13 @@
 import { Helmet } from '@dr.pogodin/react-helmet';
 import { motion } from 'motion/react';
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  title,
+  children
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-3">
@@ -19,75 +25,358 @@ export default function PrivacyPage() {
   return (
     <>
       <Helmet>
-        <title>Privacy Policy — SynTract</title>
-        <meta name="description" content="SynTract Privacy Policy. How we collect, use, and protect your data." />
-        <link rel="canonical" href="https://syntract.io/privacy" />
+        <title>Privacy Policy | SynTract Labs</title>
+        <meta
+          name="description"
+          content="Privacy Policy for SynTract Labs websites, mobile applications, AI products, software, and related services."
+        />
+        <link rel="canonical" href="https://syntract.net/privacy" />
       </Helmet>
 
-      <div className="min-h-screen" style={{ background: 'linear-gradient(160deg, #0A0D12 0%, #0f1420 100%)' }}>
+      <div
+        className="min-h-screen"
+        style={{
+          background: 'linear-gradient(160deg, #0A0D12 0%, #0f1420 100%)'
+        }}
+      >
         <div className="container mx-auto px-6 py-16 max-w-3xl">
-          <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.24, ease: 'easeOut' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.24, ease: 'easeOut' }}
+          >
             <div className="mb-10">
-              <p className="font-mono text-[10px] text-primary/60 tracking-widest uppercase mb-3">Legal</p>
-              <h1 className="text-3xl font-bold text-foreground tracking-tight mb-2">Privacy Policy</h1>
-              <p className="text-xs text-muted-foreground font-mono">Last updated: May 23, 2026</p>
+              <p className="font-mono text-[10px] text-primary/60 tracking-widest uppercase mb-3">
+                Legal
+              </p>
+              <h1 className="text-3xl font-bold text-foreground tracking-tight mb-2">
+                Privacy Policy
+              </h1>
+              <p className="text-xs text-muted-foreground font-mono">
+                Last updated: August 20, 2026
+              </p>
             </div>
 
-            <div className="rounded-xl border border-white/[0.07] p-8 flex flex-col gap-8" style={{ background: '#0d1117' }}>
+            <div
+              className="rounded-xl border border-white/[0.07] p-8 flex flex-col gap-8"
+              style={{ background: '#0d1117' }}
+            >
               <p className="text-sm text-muted-foreground leading-relaxed">
-                SynTract, Inc. ("SynTract", "we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard information when you use our API, website, and related services (the "Service").
+                SynTract Labs ("SynTract", "we", "us", or "our") respects
+                your privacy. This Privacy Policy describes how we may collect,
+                use, disclose, retain, and protect information when you use
+                SynTract websites, mobile applications, software products,
+                AI-powered services, SynTract CorTex™, the SynTract Build
+                Engine™, and related products and services (collectively,
+                the "Services").
               </p>
 
-              <Section title="1. Information We Collect">
-                <p><span className="text-foreground font-medium">Account information:</span> When you register, we collect your name, email address, company name, and password (hashed).</p>
-                <p><span className="text-foreground font-medium">API usage data:</span> We log API requests including timestamps, endpoints called, document types, response latencies, and error codes. We do not log document content in our access logs.</p>
-                <p><span className="text-foreground font-medium">Documents submitted:</span> Documents you submit for extraction are processed transiently. By default, documents are deleted within 24 hours. Extracted structured data is retained for 90 days to support retrieval via the API.</p>
-                <p><span className="text-foreground font-medium">Payment information:</span> Billing is handled by our payment processor. We store only the last 4 digits of your card, expiry, and billing address. We never store full card numbers.</p>
-              </Section>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                The information processed by SynTract may vary according to
+                the particular Service, application, features, and choices
+                you make.
+              </p>
 
-              <Section title="2. How We Use Your Information">
-                <p>We use the information we collect to: provide and improve the Service; authenticate your API requests; send transactional emails (account creation, billing, security alerts); respond to support requests; detect and prevent abuse; and comply with legal obligations.</p>
-                <p>We do not sell your personal information to third parties. We do not use your documents to train our models without your explicit written consent.</p>
-              </Section>
-
-              <Section title="3. Data Retention">
-                <p>Account data is retained for the duration of your account and deleted within 30 days of account closure. API logs are retained for 12 months. Extracted data is retained for 90 days. Documents are deleted within 24 hours of processing (or immediately in zero-retention mode).</p>
-              </Section>
-
-              <Section title="4. Data Security">
-                <p>We implement industry-standard security measures including AES-256 encryption at rest, TLS 1.3 in transit, network isolation, and access controls. We are SOC 2 Type II certified. Despite these measures, no system is perfectly secure — please use strong passwords and protect your API keys.</p>
-              </Section>
-
-              <Section title="5. Data Residency">
-                <p>By default, data is processed in the United States. Enterprise customers may elect EU or APAC data residency. If you are located in the EU, we process your data under Standard Contractual Clauses (SCCs) as a lawful transfer mechanism.</p>
-              </Section>
-
-              <Section title="6. GDPR Rights">
-                <p>If you are in the European Economic Area, you have the right to: access your personal data; correct inaccurate data; request deletion; object to processing; and data portability. To exercise these rights, contact us at <a href="mailto:privacy@syntract.io" className="text-primary hover:underline">privacy@syntract.io</a>. We will respond within 30 days.</p>
-              </Section>
-
-              <Section title="7. Cookies">
-                <p>We use essential cookies for authentication and session management. We use analytics cookies (with your consent) to understand how the Service is used. You can disable non-essential cookies in your browser settings or via our cookie banner.</p>
-              </Section>
-
-              <Section title="8. Third-Party Services">
-                <p>We use a limited number of sub-processors to operate the Service, including cloud infrastructure providers, a payment processor, and an email delivery service. A full list of sub-processors is available to enterprise customers upon request.</p>
-              </Section>
-
-              <Section title="9. Children's Privacy">
-                <p>The Service is not directed to individuals under 18. We do not knowingly collect personal information from children. If you believe we have inadvertently collected such information, contact us immediately.</p>
-              </Section>
-
-              <Section title="10. Changes to This Policy">
-                <p>We may update this Privacy Policy from time to time. We will notify you of material changes via email or a dashboard notice at least 14 days before they take effect.</p>
-              </Section>
-
-              <div className="pt-4 border-t border-border">
-                <p className="text-xs text-muted-foreground">
-                  Privacy questions or requests? Contact our Data Protection Officer at{' '}
-                  <a href="mailto:privacy@syntract.io" className="text-primary hover:underline">privacy@syntract.io</a>
+              <Section title="1. Information We May Collect">
+                <p>
+                  <span className="text-foreground font-medium">
+                    Account and contact information:
+                  </span>{' '}
+                  We may collect information such as your name, email address,
+                  account credentials, company information, and other details
+                  you provide when creating an account, contacting SynTract,
+                  requesting support, or using our Services.
                 </p>
-              </div>
+
+                <p>
+                  <span className="text-foreground font-medium">
+                    Mobile application information:
+                  </span>{' '}
+                  SynTract mobile applications may process information
+                  necessary to provide their features. The specific
+                  information involved depends on the application and the
+                  features you choose to use.
+                </p>
+
+                <p>
+                  <span className="text-foreground font-medium">
+                    User content:
+                  </span>{' '}
+                  We may process information you choose to submit through the
+                  Services, including text, prompts, images, files, task
+                  descriptions, project information, instructions, feedback,
+                  and other content.
+                </p>
+
+                <p>
+                  <span className="text-foreground font-medium">
+                    AI and software-generation information:
+                  </span>{' '}
+                  AI-powered SynTract features may process prompts, project
+                  requirements, technical configurations, generated output,
+                  task information, and other information necessary to
+                  provide the requested functionality.
+                </p>
+
+                <p>
+                  <span className="text-foreground font-medium">
+                    Usage and diagnostic information:
+                  </span>{' '}
+                  We may collect application events, feature usage, browser
+                  or device information, timestamps, error reports,
+                  performance information, and other diagnostic information
+                  used to operate, secure, maintain, and improve the
+                  Services.
+                </p>
+
+                <p>
+                  <span className="text-foreground font-medium">
+                    Transaction information:
+                  </span>{' '}
+                  When you purchase products or services, payments may be
+                  processed by third-party payment providers. SynTract may
+                  receive transaction information necessary for purchases,
+                  subscriptions, billing, account administration, and
+                  customer support.
+                </p>
+              </Section>
+
+              <Section title="2. How We Use Information">
+                <p>
+                  We may use information to provide, operate, maintain,
+                  secure, and improve the Services; authenticate accounts;
+                  process transactions; provide support; communicate about
+                  accounts or Services; diagnose technical issues; detect
+                  or prevent misuse; and comply with applicable legal
+                  obligations.
+                </p>
+
+                <p>
+                  We may also use information to improve SynTract products,
+                  features, software, artificial intelligence capabilities,
+                  and user experiences where permitted by applicable law.
+                </p>
+
+                <p>
+                  SynTract does not sell your personal information.
+                </p>
+              </Section>
+
+              <Section title="3. Artificial Intelligence Services">
+                <p>
+                  Certain SynTract Services use artificial intelligence,
+                  machine learning models, cloud infrastructure, or other
+                  technologies provided by SynTract or third-party service
+                  providers.
+                </p>
+
+                <p>
+                  Information necessary to perform a requested AI-powered
+                  function may be transmitted to service providers involved
+                  in providing that functionality. The providers and types
+                  of information involved may vary by Service, feature, and
+                  configuration.
+                </p>
+              </Section>
+
+              <Section title="4. Mobile Applications">
+                <p>
+                  This Privacy Policy applies to mobile applications
+                  developed or published by SynTract Labs unless a particular
+                  application provides a separate or supplemental privacy
+                  notice.
+                </p>
+
+                <p>
+                  Individual applications may request access to device
+                  features or information when required to provide particular
+                  functionality. Where required by the device or operating
+                  system, permission will be requested before access occurs.
+                </p>
+
+                <p>
+                  Privacy information displayed for a SynTract application
+                  in the Apple App Store or another application marketplace
+                  is intended to describe the practices applicable to that
+                  specific application. Because SynTract applications may
+                  provide different features, privacy practices may differ
+                  between applications.
+                </p>
+              </Section>
+
+              <Section title="5. Account Deletion and Data Requests">
+                <p>
+                  If a SynTract application or Service permits account
+                  creation, users may request deletion of their account and
+                  associated personal information, subject to information
+                  SynTract may be required or permitted to retain for legal,
+                  security, fraud-prevention, transaction, or other
+                  legitimate purposes.
+                </p>
+
+                <p>
+                  Where supported, account deletion may be initiated using
+                  the applicable application's account or settings controls.
+                  Privacy-related questions or requests may also be submitted
+                  to{' '}
+                  <a
+                    href="mailto:contact@syntract.net"
+                    className="text-primary hover:underline"
+                  >
+                    contact@syntract.net
+                  </a>
+                  .
+                </p>
+              </Section>
+
+              <Section title="6. Data Retention">
+                <p>
+                  We retain information for as long as reasonably necessary
+                  to provide and support the Services, maintain appropriate
+                  business and transaction records, protect security,
+                  resolve disputes, enforce agreements, and comply with
+                  applicable legal obligations.
+                </p>
+
+                <p>
+                  Retention periods may differ based on the type of
+                  information, the Service involved, why the information was
+                  collected, and applicable legal or operational
+                  requirements.
+                </p>
+              </Section>
+
+              <Section title="7. Information Sharing">
+                <p>
+                  We may share information with service providers that help
+                  us operate the Services, including infrastructure and cloud
+                  providers, payment providers, communication services,
+                  analytics or diagnostic providers, AI technology
+                  providers, and other vendors supporting SynTract
+                  functionality.
+                </p>
+
+                <p>
+                  We may also disclose information when required by law; when
+                  reasonably necessary to protect SynTract, our users, or
+                  others; or in connection with a merger, acquisition,
+                  financing, sale of assets, or similar business
+                  transaction.
+                </p>
+              </Section>
+
+              <Section title="8. Data Security">
+                <p>
+                  We use administrative, technical, and organizational
+                  safeguards designed to reduce the risk of unauthorized
+                  access, loss, misuse, alteration, or disclosure of
+                  information.
+                </p>
+
+                <p>
+                  No electronic transmission, storage system, or security
+                  measure can guarantee absolute security.
+                </p>
+              </Section>
+
+              <Section title="9. Cookies and Similar Technologies">
+                <p>
+                  SynTract websites and web-based Services may use cookies,
+                  local storage, and similar technologies for authentication,
+                  preferences, security, functionality, performance, and
+                  analytics.
+                </p>
+
+                <p>
+                  Browser or device settings may allow you to control some of
+                  these technologies. Disabling certain technologies may
+                  affect Service functionality.
+                </p>
+              </Section>
+
+              <Section title="10. Privacy Choices and Rights">
+                <p>
+                  Depending on your location, applicable law may provide
+                  rights relating to personal information, including rights
+                  to request access, correction, deletion, restriction,
+                  portability, or information about how personal information
+                  is processed.
+                </p>
+
+                <p>
+                  To submit a privacy request, contact{' '}
+                  <a
+                    href="mailto:contact@syntract.net"
+                    className="text-primary hover:underline"
+                  >
+                    contact@syntract.net
+                  </a>
+                  . We may need to verify a requestor's identity before
+                  fulfilling certain requests.
+                </p>
+              </Section>
+
+              <Section title="11. Children's Privacy">
+                <p>
+                  SynTract does not knowingly collect personal information
+                  from children in violation of applicable law. If you
+                  believe personal information relating to a child has been
+                  provided to SynTract improperly, contact us so we can
+                  review the matter and take appropriate action.
+                </p>
+              </Section>
+
+              <Section title="12. International Users">
+                <p>
+                  SynTract and service providers supporting the Services may
+                  process information in countries other than the country
+                  where a user resides. Where required, we take steps
+                  designed to provide appropriate safeguards for
+                  international transfers of personal information.
+                </p>
+              </Section>
+
+              <Section title="13. Third-Party Services and Links">
+                <p>
+                  The Services may integrate with or link to third-party
+                  websites, applications, platforms, software, or services.
+                  This Privacy Policy does not govern the independent privacy
+                  practices of third parties. We encourage users to review
+                  applicable third-party privacy policies.
+                </p>
+              </Section>
+
+              <Section title="14. Changes to This Privacy Policy">
+                <p>
+                  We may update this Privacy Policy as SynTract products,
+                  technology, business practices, or legal obligations
+                  change. When this policy is updated, the "Last updated"
+                  date above will be revised. Additional notice may be
+                  provided where appropriate or required.
+                </p>
+              </Section>
+
+              <Section title="15. Contact Us">
+                <p>
+                  Questions about this Privacy Policy, SynTract privacy
+                  practices, or personal information requests may be
+                  directed to:
+                </p>
+
+                <p>
+                  <span className="text-foreground font-medium">
+                    SynTract Labs
+                  </span>
+                  <br />
+                  Email:{' '}
+                  <a
+                    href="mailto:contact@syntract.net"
+                    className="text-primary hover:underline"
+                  >
+                    contact@syntract.net
+                  </a>
+                </p>
+              </Section>
             </div>
           </motion.div>
         </div>

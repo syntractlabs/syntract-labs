@@ -1,93 +1,93 @@
 {
   "hero": {
-    "badge": "SynTract Build Engine™ — Now in Beta",
-    "headline1": "Describe it.",
-    "headline2": "The engine builds it.",
-    "body": "The SynTract Build Engine is a proprietary autonomous developer agent that generates complete, production-ready software from a single prompt — mobile apps, games, AI agents, and full-stack systems. No templates. No scaffolding. Real code.",
-    "cta_primary": "Start building free",
-    "cta_secondary": "See how it works",
-    "trust1": "Free tier — 2 BCUs included",
-    "trust2": "Full source code ownership",
-    "trust3": "No credit card required"
+    "badge": "SynTract Labs — Intelligent Software & Autonomous Systems",
+    "headline1": "We build. We orchestrate.",
+    "headline2": "We execute.",
+    "body": "SynTract Labs develops production software, published mobile applications, AI agents, and autonomous operating systems. At the center is SynTract CorTex™, our governed AI orchestration platform designed to move organizations from intent to execution.",
+    "cta_primary": "Explore SynTract",
+    "cta_secondary": "See what we build",
+    "trust1": "Mobile app development and publishing",
+    "trust2": "Production-ready software",
+    "trust3": "Human-controlled autonomy"
   },
   "terminal": {
-    "title": "SynTract Build Engine™",
+    "title": "SynTract CorTex™",
     "lines": [
       {
         "id": "t1",
         "prefix": "$",
-        "text": "syntract build \"iOS fitness tracker with AI coaching\"",
+        "text": "cortex submit \"Resolve critical supplier disruption\"",
         "type": "command"
       },
       {
         "id": "t2",
         "prefix": "›",
-        "text": "Planning architecture...",
+        "text": "Interpreting operational objective...",
         "type": "info"
       },
       {
         "id": "t3",
         "prefix": "›",
-        "text": "Generating 47 source files...",
+        "text": "Evaluating current system state...",
         "type": "info"
       },
       {
         "id": "t4",
         "prefix": "›",
-        "text": "Compiling React Native + Swift modules...",
+        "text": "Applying Constitution policies...",
         "type": "info"
       },
       {
         "id": "t5",
         "prefix": "›",
-        "text": "Integrating OpenAI coaching agent...",
+        "text": "Prioritizing tasks and assigning agents...",
         "type": "info"
       },
       {
         "id": "t6",
         "prefix": "✓",
-        "text": "Build complete — 2.1 BCUs consumed",
+        "text": "Human override channel standing by",
         "type": "success"
       },
       {
         "id": "t7",
         "prefix": "✓",
-        "text": "Source code ready for download",
+        "text": "Governed execution initiated",
         "type": "success"
       }
     ]
   },
   "outputs_section": {
-    "eyebrow": "Output types",
-    "heading": "One engine. Full‑scale software generation.",
-    "body": "The Build Engine delivers complete, runnable products across every major category — engineered with consistent structure, clean architecture, and deployment‑ready output."
+    "eyebrow": "What we build",
+    "heading": "Intelligent products. Autonomous systems. Real-world execution.",
+    "body": "SynTract Labs develops mobile applications, custom software, AI agents, and autonomous operating systems. At the center is SynTract CorTex™, our governed AI orchestration platform designed to move organizations from intent to execution."
   },
   "engine_section": {
-    "eyebrow": "Under the hood",
-    "heading": "How the Build Engine works",
-    "body": "Not a code autocomplete. Not a template generator. A multi-stage autonomous agent that reasons, plans, and engineers software end-to-end.",
-    "docs_link": "Read the full Build Engine documentation"
+    "eyebrow": "SynTract CorTex™",
+    "heading": "From intent to execution.",
+    "body": "CorTex turns operational objectives into governed execution by interpreting goals, applying organizational rules, prioritizing work, coordinating specialized agents, and keeping human operators in control.",
+    "docs_link": "Explore the CorTex architecture"
   },
   "bcu_section": {
-    "eyebrow": "Pricing model",
-    "heading": "Pay for what you build, not what you don't.",
-    "body": "SynTract uses Build Compute Units (BCUs) — a transparent measure of the computational work required to generate your software. Simple apps cost less. Complex systems cost more. No subscriptions that charge you while you're idle.",
-    "meter_note": "BCU consumption scales with complexity, file count, and AI reasoning depth. Top-up packs available at any time."
+    "eyebrow": "SynTract Build Engine™",
+    "heading": "Build software faster without sacrificing ownership.",
+    "body": "The SynTract Build Engine accelerates the creation of mobile apps, web applications, AI agents, backend services, and enterprise software. Build Compute Units provide a transparent measure of the computational work required to create each product.",
+    "meter_note": "BCU consumption scales with complexity, file count, integrations, and AI reasoning depth. Top-up packs are available when additional build capacity is needed."
   },
   "audience_section": {
-    "eyebrow": "Built for everyone",
-    "heading": "From solo founders to enterprise teams",
-    "body": "The Build Engine scales from a weekend prototype to a production system serving millions of users."
+    "eyebrow": "Built for ambitious ideas",
+    "heading": "From mobile products to autonomous operations.",
+    "body": "SynTract Labs supports founders, growing businesses, and enterprise teams with production software, AI systems, custom development, and governed autonomous execution."
   },
   "ownership_section": {
-    "eyebrow": "Source code ownership",
-    "heading": "You own everything the engine builds.",
-    "body": "Every build produces clean, readable, well-structured source code that belongs entirely to you. Download it, deploy it, hand it to your engineering team, or publish it under your own brand. No lock-in. No royalties. No restrictions."
+   "eyebrow": "Software development",
+"heading": "From concept to production.",
+"body": "SynTract Labs designs, develops, and delivers mobile applications and custom software from concept through release. Our work spans consumer apps, AI-powered products, custom platforms, enterprise tools, AI agents, and autonomous operating systems."
   },
   "cta_section": {
-    "heading": "Build your first app today.",
-    "body": "Two free BCUs. No credit card. Full source code on your first build.",
-    "cta_primary": "Start building free",
-    "cta_secondary": "View pricing"
+    "heading": "Have something ambitious in mind?",
+    "body": "Whether you're building a mobile product, introducing AI into an existing business, or moving toward autonomous operations, SynTract Labs can take it from concept to execution.",
+    "cta_primary": "Start the conversation",
+    "cta_secondary": "Explore our capabilities"
   }
 }

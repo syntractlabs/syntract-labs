@@ -165,18 +165,18 @@ function BcuMeter({
 export default function HomePage() {
   return <>
     <Helmet>
-      <title>SynTract CorTex™ — AI Platform for Autonomous Software Creation | SynTract Labs</title>
-      <meta name="description" content="SynTract CorTex is the AI platform for autonomous software creation. Powered by the Build Engine™ — generate production-ready apps, agents, and systems from a single prompt. Plus AI consulting and development services." />
+      <title>SynTract Labs — Mobile Apps, AI Systems & Autonomous Operations</title>
+      <meta name="description" content="SynTract Labs develops mobile applications, custom software, AI agents, and governed autonomous systems. Explore SynTract CorTex™, the Build Engine™, and our software development capabilities." />
       <link rel="canonical" href="https://syntract.net/" />
-      <meta property="og:title" content="SynTract CorTex™ — AI Platform for Autonomous Software Creation" />
-      <meta property="og:description" content="SynTract CorTex is the AI platform for autonomous software creation. Powered by the Build Engine™ — generate production-ready apps, agents, and full-stack systems from a single prompt." />
+      <meta property="og:title" content="SynTract Labs — Intelligent Software & Autonomous Systems" />
+      <meta property="og:description" content="SynTract Labs builds mobile applications, custom software, AI agents, and governed autonomous systems through CorTex™ and the SynTract Build Engine™." />
       <meta property="og:url" content="https://syntract.net/" />
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="SynTract Labs" />
       <meta property="og:image" content="https://syntract.net/og-image.svg" />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="SynTract CorTex™ — AI Platform for Autonomous Software Creation" />
-      <meta name="twitter:description" content="SynTract CorTex generates production-ready software from a single prompt. AI services, Build Engine™, and BCU-powered builds." />
+      <meta name="twitter:title" content="SynTract Labs — Intelligent Software & Autonomous Systems" />
+      <meta name="twitter:description" content="Mobile application development, custom software, AI agents, the SynTract Build Engine™, and governed autonomous operations through CorTex™." />
       <meta name="twitter:image" content="https://syntract.net/og-image.svg" />
       <script type="application/ld+json">{JSON.stringify({
         '@context': 'https://schema.org',
@@ -191,7 +191,7 @@ export default function HomePage() {
           name: 'SynTract Labs',
           url: 'https://syntract.net/',
           applicationCategory: 'DeveloperApplication',
-          description: 'SynTract CorTex is the AI platform for autonomous software creation, powered by the SynTract Build Engine™.'
+          description: 'SynTract Labs develops mobile applications, custom software, AI agents, and governed autonomous operating systems.'
         }, {
           '@type': 'WebPage',
           '@id': 'https://syntract.net/#webpage',
@@ -243,7 +243,7 @@ export default function HomePage() {
               }}>
                 <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/[0.08] text-primary text-sm font-mono font-semibold">
                   <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-                  SynTract CorTex™
+                  SynTract Labs
                 </span>
               </motion.div>
               <motion.h1 initial={{
@@ -257,9 +257,9 @@ export default function HomePage() {
                 delay: 0.08,
                 ease: 'easeOut' as const
               }} className="text-5xl lg:text-6xl font-bold leading-[1.07] tracking-tight text-foreground">
-                The AI platform for autonomous software creation.<br />
+                The AI lab building intelligent software and autonomous systems.<br />
                 <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  One idea. Realized.
+                  We build. We orchestrate. We execute.
                 </span>
               </motion.h1>
               <motion.p initial={{
@@ -286,11 +286,11 @@ export default function HomePage() {
                 delay: 0.24,
                 ease: 'easeOut' as const
               }} className="flex flex-wrap gap-2">
-                <CapPill icon={Smartphone} label="Mobile apps" cls="border-primary/30 bg-primary/[0.08] text-primary" />
-                <CapPill icon={Gamepad2} label="Games" cls="border-secondary/30 bg-secondary/[0.08] text-secondary" />
+                <CapPill icon={Smartphone} label="Mobile app development" cls="border-primary/30 bg-primary/[0.08] text-primary" />
+                <CapPill icon={Gamepad2} label="Custom software" cls="border-secondary/30 bg-secondary/[0.08] text-secondary" />
                 <CapPill icon={Bot} label="AI agents" cls="border-accent/30 bg-accent/[0.08] text-accent" />
-                <CapPill icon={Globe} label="Full-stack systems" cls="border-emerald-500/30 bg-emerald-500/[0.08] text-emerald-400" />
-                <CapPill icon={Braces} label="APIs & backends" cls="border-primary/30 bg-primary/[0.08] text-primary" />
+                <CapPill icon={Globe} label="SynTract CorTex™" cls="border-emerald-500/30 bg-emerald-500/[0.08] text-emerald-400" />
+                <CapPill icon={Braces} label="Enterprise AI" cls="border-primary/30 bg-primary/[0.08] text-primary" />
               </motion.div>
               <motion.div initial={{
                 opacity: 0,
@@ -303,7 +303,7 @@ export default function HomePage() {
                 delay: 0.32,
                 ease: 'easeOut' as const
               }} className="flex flex-wrap gap-3">
-                <Link to="/signup" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg text-sm font-bold bg-gradient-to-r from-primary to-secondary text-primary-foreground transition-all hover:opacity-90">
+                <Link to="/contact" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg text-sm font-bold bg-gradient-to-r from-primary to-secondary text-primary-foreground transition-all hover:opacity-90">
                   <Sparkles size={14} />
                   <span>{home.hero.cta_primary}</span>
                 </Link>
@@ -393,12 +393,12 @@ export default function HomePage() {
           </div>
         </FadeUp>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
-          <OutputCard icon={Smartphone} title="Mobile Applications" iconCls="bg-primary/10 border border-primary/20 text-primary" delay={0} desc="Native iOS and Android apps with full UI, navigation, state management, and backend integration — ready to submit to the App Store." />
-          <OutputCard icon={Globe} title="Web Applications" iconCls="bg-secondary/10 border border-secondary/20 text-secondary" delay={0.05} desc="Full-stack web apps: React frontends, REST or GraphQL APIs, database schemas, auth systems, and deployment configs." />
-          <OutputCard icon={Bot} title="AI Agents & Pipelines" iconCls="bg-accent/10 border border-accent/20 text-accent" delay={0.1} desc="Autonomous agents with tool use, memory, and multi-step reasoning. Document intelligence, workflow automation, and LLM-powered products." />
-          <OutputCard icon={Gamepad2} title="Games" iconCls="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400" delay={0.15} desc="2D and casual games with game loops, physics, scoring, and asset pipelines — built for web, mobile, or desktop targets." />
-          <OutputCard icon={Database} title="Backend Systems & APIs" iconCls="bg-primary/10 border border-primary/20 text-primary" delay={0.2} desc="Standalone backend services: REST APIs, microservices, data pipelines, cron jobs, and webhook handlers with full test suites." />
-          <OutputCard icon={LayoutDashboard} title="Dashboards & Tools" iconCls="bg-secondary/10 border border-secondary/20 text-secondary" delay={0.25} desc="Internal tools, admin panels, analytics dashboards, and SaaS control planes — wired to real data sources from day one." />
+          <OutputCard icon={Smartphone} title="Mobile Applications" iconCls="bg-primary/10 border border-primary/20 text-primary" delay={0} desc="Consumer and business mobile applications designed, developed, tested, and published by SynTract Labs." />
+          <OutputCard icon={Globe} title="AI-Powered Products" iconCls="bg-secondary/10 border border-secondary/20 text-secondary" delay={0.05} desc="Software products with AI built directly into the user experience, workflow, and product architecture." />
+          <OutputCard icon={Bot} title="AI Agents & Systems" iconCls="bg-accent/10 border border-accent/20 text-accent" delay={0.1} desc="Specialized agents with tools, memory, reasoning, workflow automation, and integration into larger operating systems." />
+          <OutputCard icon={Gamepad2} title="Custom Software" iconCls="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400" delay={0.15} desc="Purpose-built software, internal tools, customer platforms, and digital products designed around the real operational need." />
+          <OutputCard icon={Database} title="Enterprise Systems" iconCls="bg-primary/10 border border-primary/20 text-primary" delay={0.2} desc="APIs, backend services, integrations, governance controls, operational dashboards, and enterprise workflow systems." />
+          <OutputCard icon={LayoutDashboard} title="Autonomous Operations" iconCls="bg-secondary/10 border border-secondary/20 text-secondary" delay={0.25} desc="CorTex-powered environments that coordinate goals, policies, agents, tasks, execution, telemetry, and human intervention." />
         </div>
       </div>
     </section>
@@ -414,16 +414,89 @@ export default function HomePage() {
           </div>
         </FadeUp>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
-          <EngineStep number={1} icon={Terminal} iconCls="bg-primary/10 border border-primary/20 text-primary" numBg="bg-primary" delay={0} title="Prompt intake & planning" desc="The engine parses your natural-language prompt, infers architecture requirements, and produces a structured technical blueprint before writing a single line of code." />
-          <EngineStep number={2} icon={Cpu} iconCls="bg-secondary/10 border border-secondary/20 text-secondary" numBg="bg-secondary" delay={0.07} title="Autonomous code generation" desc="A specialized build agent streams production-quality source files — components, services, schemas, tests — following the blueprint with no human in the loop." />
-          <EngineStep number={3} icon={GitBranch} iconCls="bg-accent/10 border border-accent/20 text-accent" numBg="bg-accent" delay={0.14} title="Validation & refinement" desc="The engine self-reviews its output, catches structural issues, and iterates. You can also submit a refine prompt to steer the result in any direction." />
-          <EngineStep number={4} icon={Package} iconCls="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400" numBg="bg-emerald-500" delay={0.21} title="Delivery & preview" desc="Completed builds are compiled to a live preview URL and packaged for download. Full source code, ready to run, extend, or hand off to your own team." />
+          <EngineStep number={1} icon={Terminal} iconCls="bg-primary/10 border border-primary/20 text-primary" numBg="bg-primary" delay={0} title="Understand" desc="CorTex interprets the operational objective, identifies the required outcome, and turns intent into structured work." />
+          <EngineStep number={2} icon={Cpu} iconCls="bg-secondary/10 border border-secondary/20 text-secondary" numBg="bg-secondary" delay={0.07} title="Govern" desc="The Constitution Engine evaluates proposed work against mission requirements, organizational policies, safety rules, and operating constraints." />
+          <EngineStep number={3} icon={GitBranch} iconCls="bg-accent/10 border border-accent/20 text-accent" numBg="bg-accent" delay={0.14} title="Orchestrate" desc="CorTex prioritizes tasks, evaluates dependencies, assigns specialized agents, and coordinates execution against the Digital Twin." />
+          <EngineStep number={4} icon={Package} iconCls="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400" numBg="bg-emerald-500" delay={0.21} title="Execute" desc="Agents perform assigned work while CorTex tracks lifecycle state, execution results, telemetry, and human override activity." />
         </div>
         <FadeUp delay={0.3}>
           <div className="mt-8 text-center">
             <Link to="/docs" className="inline-flex items-center gap-2 text-sm text-primary/80 hover:text-primary transition-colors font-medium">
               <span>{home.engine_section.docs_link}</span> <ArrowRight size={13} />
             </Link>
+          </div>
+        </FadeUp>
+      </div>
+    </section>
+
+
+    {/* ── HUMAN CONTROL & GOVERNANCE ───────────────────────────────────── */}
+    <section className="py-20 border-t border-border bg-card/30">
+      <div className="container mx-auto px-6">
+        <FadeUp>
+          <div className="text-center mb-12">
+            <p className="font-mono text-xs text-primary/70 tracking-widest uppercase mb-3">
+              Governed autonomy
+            </p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
+              Autonomous does not mean uncontrolled.
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              CorTex combines executive orchestration with organizational rules,
+              real-time operational state, specialized agents, complete execution
+              visibility, and direct human authority.
+            </p>
+          </div>
+        </FadeUp>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+          <OutputCard
+            icon={Cpu}
+            title="Executive Orchestration"
+            desc="CorTex translates objectives into structured tasks, priorities, dependencies, and coordinated execution."
+            iconCls="bg-primary/10 border border-primary/20 text-primary"
+            delay={0}
+          />
+          <OutputCard
+            icon={FileCode2}
+            title="Constitution Engine"
+            desc="Autonomous activity is evaluated against organizational rules, mission requirements, safety policies, and operating constraints."
+            iconCls="bg-secondary/10 border border-secondary/20 text-secondary"
+            delay={0.06}
+          />
+          <OutputCard
+            icon={Database}
+            title="Digital Twin"
+            desc="State and telemetry provide CorTex with the operational context needed to prioritize work and coordinate execution."
+            iconCls="bg-accent/10 border border-accent/20 text-accent"
+            delay={0.12}
+          />
+          <OutputCard
+            icon={Zap}
+            title="Human Hotshot Override"
+            desc="Authorized operators can immediately move urgent work to the front of the queue without removing governance or traceability."
+            iconCls="bg-red-500/10 border border-red-500/20 text-red-400"
+            delay={0.18}
+          />
+        </div>
+
+        <FadeUp delay={0.25}>
+          <div className="mt-10 max-w-4xl mx-auto rounded-xl border border-primary/20 p-6 bg-primary/[0.04]">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-5">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-primary/10 border border-primary/25 shrink-0">
+                <Terminal size={20} className="text-primary" />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-foreground mb-1">
+                  Autonomy when you want it. Control when you need it.
+                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Human-directed hotshot work can supersede normal scheduling,
+                  while the Constitution Engine and execution logs preserve the
+                  boundaries and traceability required for responsible autonomy.
+                </p>
+              </div>
+            </div>
           </div>
         </FadeUp>
       </div>
@@ -503,18 +576,18 @@ export default function HomePage() {
           {[{
             icon: Rocket,
             iconCls: 'bg-primary/10 border border-primary/20 text-primary',
-            title: 'Individuals & founders',
-            points: ['Validate ideas in hours, not weeks', 'No dev team required', 'Own your source code outright', 'Free tier to start — no card needed']
+            title: 'Product builders & founders',
+            points: ['Mobile application development', 'AI-powered product development', 'Concept-to-production execution', 'Source code ownership and flexibility']
           }, {
             icon: Layers,
             iconCls: 'bg-secondary/10 border border-secondary/20 text-secondary',
-            title: 'Small & mid-size businesses',
-            points: ['Cut custom software costs dramatically', 'Prototype before committing to a build', 'Extend and refine with your own team', 'Starter and Professional plans']
+            title: 'Growing businesses',
+            points: ['Custom software and internal tools', 'AI agents and workflow automation', 'Operational dashboards and integrations', 'Scalable product development support']
           }, {
             icon: Zap,
             iconCls: 'bg-accent/10 border border-accent/20 text-accent',
-            title: 'Enterprise teams',
-            points: ['Team plan with shared BCU pools', 'Role-based access control', 'Priority build queue', 'Custom volume pricing available']
+            title: 'Enterprise operations',
+            points: ['Governed autonomous operations', 'Human override and operator control', 'Agent orchestration across systems', 'Digital Twin state and telemetry']
           }].map((card, i) => <FadeUp key={card.title} delay={i * 0.08}>
             <div className="rounded-xl border border-border p-6 flex flex-col gap-4 h-full bg-card">
               <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${card.iconCls}`}>
@@ -538,27 +611,27 @@ export default function HomePage() {
       <div className="container mx-auto px-6">
         <FadeUp>
           <div className="text-center mb-12">
-            <p className="font-mono text-xs text-primary/70 tracking-widest uppercase mb-3">AI Services</p>
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">Need more than a build?</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">SynTract's team works directly with yours to design, build, and deploy AI systems tailored to your business — from concept to production.</p>
+            <p className="font-mono text-xs text-primary/70 tracking-widest uppercase mb-3">SynTract Labs</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">Software, AI, and autonomous systems.</h2>
+            <p className="text-muted-foreground max-w-lg mx-auto">SynTract Labs works from concept through production to develop mobile applications, custom software, AI agents, enterprise integrations, and governed autonomous systems.</p>
           </div>
         </FadeUp>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
           {[{
             icon: Bot,
             iconCls: 'bg-primary/10 border border-primary/20 text-primary',
-            title: 'Custom AI Agent Development',
-            desc: 'We design and build autonomous AI agents tailored to your workflows — from document intelligence to multi-step task automation and LLM-powered pipelines.'
+            title: 'Mobile App Development & Publishing',
+            desc: 'We design, develop, test, and publish consumer and business mobile applications with polished user experiences and production-ready architecture.'
           }, {
             icon: Cpu,
             iconCls: 'bg-secondary/10 border border-secondary/20 text-secondary',
-            title: 'AI Consulting & Strategy',
-            desc: 'Not sure where AI fits in your business? Our team identifies high-impact opportunities, selects the right models, and builds a roadmap you can execute on.'
+            title: 'Custom Software & AI Products',
+            desc: 'We build custom software, AI-powered products, operational tools, and specialized agents around the problem rather than forcing the problem into a template.'
           }, {
             icon: Layers,
             iconCls: 'bg-accent/10 border border-accent/20 text-accent',
-            title: 'Enterprise AI Integration',
-            desc: 'Connect AI to your existing systems — CRMs, ERPs, data warehouses, and internal tools. We handle architecture, APIs, and deployment end to end.'
+            title: 'CorTex™ Autonomous Operations',
+            desc: 'CorTex coordinates objectives, policies, agents, task scheduling, execution, Digital Twin telemetry, and human intervention through one governed operating layer.'
           }].map((card, i) => <FadeUp key={card.title} delay={i * 0.08}>
             <div className="rounded-xl border border-border p-6 flex flex-col gap-4 h-full bg-card hover:border-primary/30 transition-all">
               <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${card.iconCls}`}>
@@ -591,7 +664,7 @@ export default function HomePage() {
           </FadeUp>
           <FadeUp delay={0.1} className="flex-shrink-0">
             <div className="flex flex-col gap-3">
-              {['Full source code download on every build', 'No SynTract attribution required', 'Commercial use included in all plans', 'Extend, modify, and redistribute freely'].map(pt =>
+              {['Mobile app development and publishing', 'Custom software from concept to production', 'AI agents and enterprise integrations', 'Governed autonomous operations through CorTex™'].map(pt =>
                 <div key={pt} className="flex items-center gap-2 text-sm text-muted-foreground">
                   <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
                   <span>{pt}</span>
@@ -607,17 +680,17 @@ export default function HomePage() {
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
           {[{
-            value: '50+',
-            label: 'Software products built'
+            value: 'Mobile',
+            label: 'Application development'
           }, {
-            value: '<2min',
-            label: 'Median build time'
+            value: 'AI-native',
+            label: 'Product architecture'
           }, {
-            value: '10+',
-            label: 'Output categories'
+            value: 'Governed',
+            label: 'Autonomous execution'
           }, {
-            value: '100%',
-            label: 'Source code ownership'
+            value: 'Human',
+            label: 'Operator control'
           }].map((m, i) => <FadeUp key={m.label} delay={i * 0.06}>
             <div>
               <div className="text-3xl font-bold mb-1 font-mono bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
@@ -640,8 +713,8 @@ export default function HomePage() {
             </div>
             <div className="flex-1 text-center md:text-left flex flex-col gap-2">
               <p className="font-mono text-xs text-primary/70 tracking-widest uppercase">Meet Klaus</p>
-              <h3 className="text-xl font-bold text-foreground">SynTract's AI intake agent — available 24/7.</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Tell Klaus what you're building or what problem you're trying to solve. He'll qualify your project, recommend the right plan or service, and connect you with the right team member — instantly.</p>
+              <h3 className="text-xl font-bold text-foreground">The voice of SynTract Labs, available 24/7.</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">Tell Klaus what you want to build, automate, or orchestrate. Klaus will identify the appropriate SynTract capability, gather the right context, and guide you toward the next step.</p>
             </div>
             <div className="flex-shrink-0">
               <button
@@ -676,7 +749,7 @@ export default function HomePage() {
                 <Sparkles size={14} />
                 <span>{home.cta_section.cta_primary}</span>
               </Link>
-              <Link to="/pricing" className="inline-flex items-center gap-2 px-7 py-3 rounded-lg text-sm font-medium border border-border text-muted-foreground hover:text-foreground hover:bg-white/[0.04] transition-all">
+              <Link to="/product" className="inline-flex items-center gap-2 px-7 py-3 rounded-lg text-sm font-medium border border-border text-muted-foreground hover:text-foreground hover:bg-white/[0.04] transition-all">
                 <span>{home.cta_section.cta_secondary}</span> <ChevronRight size={14} />
               </Link>
             </div>
